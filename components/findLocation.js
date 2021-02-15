@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class GetUserInfo extends Component {
+class findLocation extends Component {
   constructor(props) {
     super(props);
 
@@ -12,7 +12,7 @@ class GetUserInfo extends Component {
       last_name: '',
       email: '',
       password: '',
-      userData: [],
+      listData: [],
     };
   }
 
@@ -44,9 +44,8 @@ class GetUserInfo extends Component {
   getInfo = async () => {
     //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
-    const id = await AsyncStorage.getItem('@user_id');
-    console.log(id);
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
+    
+    return fetch('http://10.0.2.2:3333/api/1.0.0/find' , {
       headers: {
         'X-Authorization': value, 
       },
@@ -64,7 +63,7 @@ class GetUserInfo extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          userData: responseJson
+          listData: responseJson
         });
         ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
       })
@@ -75,7 +74,7 @@ class GetUserInfo extends Component {
   };
 
   render() {
-   const data = this.state.userData;
+   
 
     if (this.state.isLoading) {
       return (
@@ -87,17 +86,30 @@ class GetUserInfo extends Component {
       return (
         
         <View>
-         <Button title="Get User Information" onPress={() => this.getInfo()} />
+           <Button title="Get Info" onPress={() => this.getInfo()} />
            <FlatList
-          data = {this.state.userData}
+          data = {this.state.listData}
           renderItem={({item}) => (
             <View>
-           <Text>{item.first_name} {item.last_name} </Text>
+           <Text>
+               
+               Location ID : {item.location_id} ,
+               Location name : {item.location_name} , 
+           Location town : {item.location_town}  , 
+           Latitude : {item.latitude} , 
+           Longitude : {item.longitude} ,
+           Photo : {item.photo_path} , 
+           Overall Rating: {item.avg_overall_rating} ,
+        Avg Price Rating : {item.avg_price_rating} ,
+        Avg Quality Rating : {item.avg_quality_rating} ,
+        Avg Cleanliness Rating :  {item.avg_cleanliness_rating}
+            </Text>
 
             </View>
           )}
-          keyExtractor ={(item, index) => item.user_id.toString()}
+          keyExtractor ={(item, index) => item.location_id.toString()}
           />
+           
 
          
 
@@ -107,4 +119,4 @@ class GetUserInfo extends Component {
   }
 }
 
-export default GetUserInfo;
+export default findLocation;

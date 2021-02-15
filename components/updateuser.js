@@ -78,7 +78,7 @@ class UpdateUser extends Component {
     })
       .then((response) => {
         if (response.status === 200) {
-          return response.json();
+         // return response.json();
         } else if (response.status === 400) {
           throw 'Bad Request';
         } else if (response.status === 401) {
@@ -92,10 +92,11 @@ class UpdateUser extends Component {
         this.setState({
           isLoading: false,
         
-         // userData: responseJson,
         });
-        //  console.log("Details changed" , responseJson);
-        //  this.props.navigation.navigate("Page3");
+          console.log("Details changed");
+     
+        this.props.navigation.navigate('Home');
+
            ToastAndroid.show("Details Updated!", ToastAndroid.SHORT);
       })
       .catch((error) => {

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class Page3 extends Component {
+class LocationReviews extends Component {
   constructor(props) {
     super(props);
     
@@ -25,7 +25,7 @@ class Page3 extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
+       ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else{
       this.setState({
@@ -48,9 +48,21 @@ class Page3 extends Component {
         <View>
           <Text>This is P3</Text>
           <Button
-            title="Go back"
-            onPress={() => this.props.navigation.goBack()}
-          />
+          title="Add Review"
+          onPress={() => navigation.navigate('Add review')}
+        />
+        <Button
+          title="Update Review"
+          onPress={() => navigation.navigate('Sign Up')}
+        />
+        <Button
+          title="Delete Review"
+          onPress={() => navigation.navigate('Sign Up')}
+        />
+        <Button
+        title="Find"
+        onPress={() => navigation.navigate("findlocation")} />
+  
           <Button title="Go home" onPress={() => navigation.navigate('Home')} />
         </View>
       );
@@ -58,4 +70,4 @@ class Page3 extends Component {
   }
 }
 
-export default Page3;
+export default LocationReviews;

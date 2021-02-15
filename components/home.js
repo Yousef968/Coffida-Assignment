@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet, Button, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -12,12 +14,14 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
+        <Text style={styles.text}>
+           Coffida App</Text>
         <Button
           title="Account Mangement"
           onPress={() => navigation.navigate('Account Management')}
         />
         <Button title="Settings" onPress={() => navigation.navigate('Login')} />
-        <Button title="Click" onPress={() => navigation.navigate('Page3')} />
+        <Button title="Location Reviews" onPress={() => navigation.navigate('LocationReviews')} />
       </View>
     );
   }
@@ -25,13 +29,15 @@ class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'forestgreen',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    backgroundColor: 'pink',
   },
   text: {
     color: 'white',
-    fontSize: 25,
+    fontSize: 30,
+    textAlign: 'center',
+  //  justifyContent: 'flex-start',
   },
 });
 

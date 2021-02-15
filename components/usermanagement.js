@@ -55,7 +55,7 @@ class UserManagement extends Component {
         />
         <Button title="Login" onPress={() => navigation.navigate('Login')} />
         <Button
-          title="Update"
+          title="Update User Credentials"
           onPress={() => navigation.navigate('UpdateUser')}
         />
         <Button
