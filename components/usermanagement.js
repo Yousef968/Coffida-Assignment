@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button, ToastAndroid, Alert} from 'react-native';
+import {View, Button, ToastAndroid, Alert,Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UserManagement extends Component {
@@ -49,6 +49,9 @@ class UserManagement extends Component {
 
     return (
       <View>
+        <Text>
+          User Management
+        </Text>
         <Button
           title="Sign Up"
           onPress={() => navigation.navigate('Sign Up')}

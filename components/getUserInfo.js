@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList} from 'react-native';
+import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class GetUserInfo extends Component {
@@ -64,7 +64,7 @@ class GetUserInfo extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          userData: responseJson
+          userData: JSON.stringify(responseJson)        
         });
         ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
       })
@@ -75,7 +75,8 @@ class GetUserInfo extends Component {
   };
 
   render() {
-   const data = this.state.userData;
+   const UsersData = this.state.userData;
+   
 
     if (this.state.isLoading) {
       return (
@@ -88,16 +89,13 @@ class GetUserInfo extends Component {
         
         <View>
          <Button title="Get User Information" onPress={() => this.getInfo()} />
-           <FlatList
-          data = {this.state.userData}
-          renderItem={({item}) => (
-            <View>
-           <Text>{item.first_name} {item.last_name} </Text>
+         <Text style={styles.text}>
+           {UsersData}
+           
+         </Text>
+        
 
-            </View>
-          )}
-          keyExtractor ={(item, index) => item.user_id.toString()}
-          />
+         
 
          
 
@@ -106,5 +104,14 @@ class GetUserInfo extends Component {
     }
   }
 }
+const styles = StyleSheet.create({
+container: {
+  flex:1,
+},
+text: {
+  fontSize: 24,
+  fontWeight: 'bold',
+},
+});
 
 export default GetUserInfo;

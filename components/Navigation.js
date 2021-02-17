@@ -33,12 +33,12 @@ class App extends Component {
     return (
       <NavigationContainer>
        <Stack.Navigator>
-         <Stack.Screen name="Home" component={Home} options={{ title: 'My home' }} />
+         <Stack.Screen name="Home" component={Home} />
          
-          <Stack.Screen name="Account Management" component={UserManagement}   />
+          <Stack.Screen name="Account Management" component={UserManagement} />
           <Stack.Screen name="LocationReviews" component={LocationReviews} />
           <Stack.Screen name="Sign Up" component={Signup} />
-          <Stack.Screen name="Login" component={Login}  />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UpdateUser" component={UpdateUser} />
           <Stack.Screen name="GetUserInfo" component={GetUserInfo} />
           <Stack.Screen name="Add review" component={AddReview} />
@@ -48,15 +48,6 @@ class App extends Component {
       </NavigationContainer>
     );
   }
-}
-function DrawerNav(){
-  return(
-    <Drawer.Navigator  drawerType="slide" screenOptions = {{headerShow:true}}  >
-      <Drawer.Screen name="Home" component={Home} options={{ title: "Not Home" }}  />
-      <Drawer.Screen name="Account Management"  component={UserManagement} />
-
-    </Drawer.Navigator>
-  )
 }
 
 export default App;

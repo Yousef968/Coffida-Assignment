@@ -38,7 +38,7 @@ class Login extends Component {
       //  await AsyncStorage.setItem('@user_id', id_string)
         await AsyncStorage.setItem('@user_id', JSON.stringify(responseJson.id))
        
-        this.props.navigation.navigate('LocationReviews');
+        this.props.navigation.navigate("Home");
         ToastAndroid.show('Logged in successfully!', ToastAndroid.SHORT);
       })
       .catch((error) => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList} from 'react-native';
+import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList,ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class findLocation extends Component {
@@ -86,6 +86,8 @@ class findLocation extends Component {
       return (
         
         <View>
+        
+          
            <Button title="Get Info" onPress={() => this.getInfo()} />
            <FlatList
           data = {this.state.listData}
@@ -93,16 +95,48 @@ class findLocation extends Component {
             <View>
            <Text>
                
-               Location ID : {item.location_id} ,
-               Location name : {item.location_name} , 
-           Location town : {item.location_town}  , 
-           Latitude : {item.latitude} , 
-           Longitude : {item.longitude} ,
-           Photo : {item.photo_path} , 
-           Overall Rating: {item.avg_overall_rating} ,
-        Avg Price Rating : {item.avg_price_rating} ,
-        Avg Quality Rating : {item.avg_quality_rating} ,
-        Avg Cleanliness Rating :  {item.avg_cleanliness_rating}
+               Location ID = {item.location_id} 
+               {"\n"}
+               Location name = {item.location_name} 
+               {"\n"}
+           Location town = {item.location_town}  
+           {"\n"}
+           Latitude = {item.latitude} 
+           {"\n"}
+           Longitude = {item.longitude}
+           {"\n"}
+           Photo = {item.photo_path} 
+           {"\n"}
+           Overall Rating = {item.avg_overall_rating} 
+           {"\n"}
+        Avg Price Rating = {item.avg_price_rating} 
+        {"\n"}
+        Avg Quality Rating = {item.avg_quality_rating} 
+        {"\n"}
+        Avg Cleanliness Rating =  {item.avg_cleanliness_rating}
+        {"\n"}
+        {"\n"}
+        Location reviews:
+        {"\n"}
+        {"\n"}
+        Review ID = {item.review_id}
+        {"\n"}
+        Overall Rating = {item.overall_rating}
+        {"\n"}
+        Price Rating = {item.price_rating}
+        {"\n"}
+        Quality Rating = {item.quality_rating}
+        {"\n"}
+        Cleanliness Rating = {item.cleanliness_rating}
+        {"\n"}
+        Review body = {item.review_body}
+        {"\n"}
+        Likes = {item.likes}
+        {"\n"}
+
+
+
+
             </Text>
 
             </View>
