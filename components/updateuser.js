@@ -42,7 +42,7 @@ class UpdateUser extends Component {
   }
 };
 
-  updateItem = async () => {
+  updateUser = async () => {
     let to_send = {};
 
     const value = await AsyncStorage.getItem('@session_token');
@@ -142,7 +142,7 @@ class UpdateUser extends Component {
             value={this.state.password}
             style={{padding: 5, borderWidth: 1, margin: 5}}
           />
-          <Button title="Update" onPress={() => this.updateItem()} />
+          <Button title="Update" onPress={() => this.updateUser()} />
         </View>
       );
     }

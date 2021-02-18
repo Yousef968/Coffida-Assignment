@@ -7,6 +7,7 @@ class findLocation extends Component {
     super(props);
 
     this.state = {
+      val:"",
       isLoading: true,
       first_name: '',
       last_name: '',
@@ -72,9 +73,42 @@ class findLocation extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
+  
+  getLocInfo = async () => {
+    //Validation Here
+    const value = await AsyncStorage.getItem('@session_token');
+    
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location' + location_id , {
+      headers: {
+        'X-Authorization': value, 
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json()
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else {
+          throw 'Something went wrong';
+        }
+      })
+
+      .then(async (responseJson) => {
+        this.setState({
+          isLoading: false,
+          listData: responseJson
+        });
+        ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
 
   render() {
-   
+    const navigation = this.props.navigation;
+
 
     if (this.state.isLoading) {
       return (
@@ -89,13 +123,27 @@ class findLocation extends Component {
         
           
            <Button title="Get Info" onPress={() => this.getInfo()} />
+
            <FlatList
           data = {this.state.listData}
           renderItem={({item}) => (
             <View>
            <Text>
                
-               Location ID = {item.location_id} 
+              
+               <Button title="Location info" onPress={() => {
+                 this.props.navigation.navigate("reviewOptions" , {
+                   "myKey" : this.state.val
+                 })
+               } }
+               
+               
+               
+               
+               />
+               
+               <Button title="Get single location" onPress={() => this.getLocInfo()} />
+               Location id = {item.location_id}
                {"\n"}
                Location name = {item.location_name} 
                {"\n"}

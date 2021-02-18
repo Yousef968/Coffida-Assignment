@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class LocationReviews extends Component {
+class reviewOptions extends Component {
   constructor(props) {
     super(props);
     
@@ -47,10 +47,19 @@ class LocationReviews extends Component {
       return (
         <View>
           <Text>This is P3</Text>
-        
+          <Button
+          title="Add Review"
+          onPress={() => navigation.navigate('Add review')}
+        />
         <Button
-        title="Find"
-        onPress={() => navigation.navigate("findlocation")} />
+          title="Update Review"
+          onPress={() => navigation.navigate('Sign Up')}
+        />
+        <Button
+          title="Delete Review"
+          onPress={() => navigation.navigate('Sign Up')}
+        />
+       
   
           <Button title="Go home" onPress={() => navigation.navigate('Home')} />
         </View>
@@ -59,4 +68,4 @@ class LocationReviews extends Component {
   }
 }
 
-export default LocationReviews;
+export default reviewOptions;

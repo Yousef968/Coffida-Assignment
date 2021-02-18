@@ -20,6 +20,8 @@ import UpdateUser from './components/updateuser';
 import GetUserInfo from './components/getUserInfo';
 import AddReview from './components/addreview';
 import findLocation from './components/findLocation';
+import reviewOptions from './components/reviewOptions';
+
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,33 +31,39 @@ class App extends Component {
   constructor(props){
     super(props);
   }
+  // Stack screen login in nav container
+  // STack screen Location Reviews
   render() {
     return (
       <NavigationContainer>
        <Stack.Navigator>
-         <Stack.Screen name="Home" component={Home} options={{ title: 'My home' }} />
+         <Stack.Screen name="Coffida!" component={TabNav}  />
          
           <Stack.Screen name="Account Management" component={UserManagement}   />
-          <Stack.Screen name="LocationReviews" component={LocationReviews} />
-          <Stack.Screen name="Sign Up" component={Signup} />
-          <Stack.Screen name="Login" component={Login}  />
+          
+          <Stack.Screen name="Sign Up" component={Signup} /> 
+    
           <Stack.Screen name="UpdateUser" component={UpdateUser} />
           <Stack.Screen name="GetUserInfo" component={GetUserInfo} />
           <Stack.Screen name="Add review" component={AddReview} />
           <Stack.Screen name="findlocation" component={findLocation} />
-          
+          <Stack.Screen name="reviewOptions"component={reviewOptions} />
           </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
-function DrawerNav(){
+function TabNav(){
   return(
-    <Drawer.Navigator  drawerType="slide" screenOptions = {{headerShow:true}}  >
-      <Drawer.Screen name="Home" component={Home} options={{ title: "Not Home" }}  />
-      <Drawer.Screen name="Account Management"  component={UserManagement} />
-
-    </Drawer.Navigator>
+    <Tab.Navigator  drawerType="slide" screenOptions = {{headerShow:true}}  >
+      <Tab.Screen name="Home" component={Home} options={{ title: "Home" }}  />
+      <Tab.Screen name="Account Management"  component={UserManagement} />
+<Tab.Screen name="Login" component={Login} screenOptions= {{headerShow:false}} />
+<Tab.Screen name ="UpdateUser" component={UpdateUser} />
+<Tab.Screen name ="GetUserInfo" component={GetUserInfo} />
+<Tab.Screen name ="findlocation" component={findLocation} />
+<Tab.Screen name="LocationReviews" component={LocationReviews} />
+    </Tab.Navigator>
   )
 }
 

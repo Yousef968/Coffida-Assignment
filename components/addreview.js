@@ -1,3 +1,4 @@
+import { Item } from 'native-base';
 import React, {Component} from 'react';
 import {Button, ToastAndroid} from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
@@ -16,7 +17,7 @@ class AddReview extends Component {
   }
   addreview = () => {
     //Validation Here
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user', {
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location' + location_id , '/review/',{
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
