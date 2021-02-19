@@ -1,26 +1,36 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
+import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList,ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Thumbnail } from 'native-base';
 
-class findLocation extends Component {
+class getSingleLocation extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+
       isLoading: true,
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      listData: [],
+    location: null,
+    location_id: "",
+  location_name: "",
+  location_town: "",
+  latitude: 0,
+  longitude: 0,
+  photo_path: "",
+  avg_overall_rating: 0,
+  avg_price_rating: 0,
+  avg_quality_rating: 0,
+  avg_clenliness_rating: 0,
+  infoData: [],
     };
   }
 
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      //this.getInfo();
+     // const location_id = this.props.route.params.location_id;
+
+     
     });
   }
   componentWillUnmount() {
@@ -45,8 +55,9 @@ class findLocation extends Component {
   getInfo = async () => {
     //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
+    const location_id = this.props.route.params.location_id;
     
-    return fetch('http://10.0.2.2:3333/api/1.0.0/find' , {
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id , {
       headers: {
         'X-Authorization': value, 
       },
@@ -64,9 +75,10 @@ class findLocation extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          listData: responseJson
+          infoData: JSON.stringify(responseJson)
         });
         ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+        console.log(location_id);
       })
       .catch((error) => {
         console.log(error);
@@ -74,40 +86,11 @@ class findLocation extends Component {
       });
   };
   
-  getLocInfo = async () => {
-    //Validation Here
-    const value = await AsyncStorage.getItem('@session_token');
-    
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location' + location_id , {
-      headers: {
-        'X-Authorization': value, 
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json()
-        } else if (response.status === 401) {
-          throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
-        }
-      })
-
-      .then(async (responseJson) => {
-        this.setState({
-          isLoading: false,
-          listData: responseJson
-        });
-        ToastAndroid.show('Info out', ToastAndroid.SHORT);
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show('Error!', ToastAndroid.SHORT);
-      });
-  };
+  
 
   render() {
     const navigation = this.props.navigation;
+    const data = this.state.infoData;
 
 
     if (this.state.isLoading) {
@@ -122,33 +105,11 @@ class findLocation extends Component {
         <View>
         
           
-           <Button title="Get Info" onPress={() => this.getInfo()} />
+           <Button title="Get Info for single loc" onPress={() => this.getInfo()} />
+           <Button title="Add review for this location" onPress={() => this.props.navigation.navigate("Add review")} />
+           <Text>{data}</Text>
 
-           <FlatList
-          data = {this.state.listData}
-          renderItem={({item}) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {location_id: item.location_id})} >
-            <View>
-               
-              
-              
-               
-               
-             <Text>  Location id = {parseInt(item.location_id)} </Text>
-             <Text> Location name = {item.location_name}</Text>
         
-
-
-
-
-            
-
-            </View>
-
-            </TouchableOpacity>
-          )}
-          keyExtractor ={(item, index) => item.location_id.toString()}
-          />
            
 
          
@@ -159,4 +120,4 @@ class findLocation extends Component {
   }
 }
 
-export default findLocation;
+export default getSingleLocation;

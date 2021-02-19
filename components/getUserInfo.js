@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,StyleSheet} from 'react-native';
+import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,StyleSheet, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FlatList } from 'react-native-gesture-handler';
 
 class GetUserInfo extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class GetUserInfo extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      //this.getInfo();
+      this.getInfo();
     });
   }
   componentWillUnmount() {
@@ -64,9 +65,10 @@ class GetUserInfo extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          userData: JSON.stringify(responseJson)        
+          userData: responseJson       
         });
         ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+        console.log(this.state.userData);
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +77,10 @@ class GetUserInfo extends Component {
   };
 
   render() {
-   const UsersData = this.state.userData;
+   const data = this.state.userData;
+   const data1= Object.values(data);
+   let r = new Map(Object.entries(data));
+   console.log(r);
    
 
     if (this.state.isLoading) {
@@ -88,15 +93,28 @@ class GetUserInfo extends Component {
       return (
         
         <View>
-         <Button title="Get User Information" onPress={() => this.getInfo()} />
-         <Text style={styles.text}>
-           {UsersData}
-           
-         </Text>
-        
+          <Text style={{fontSize:22,color: 'red'}}>
+Click on the details you wish to update!
+{"\n"}
+          </Text>
+         
+         
+       <Text> User ID:{r.get("user_id")}</Text>
+       
+       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateFname")} >
+       <Text> First name : {r.get("first_name")}</Text>
+       </TouchableOpacity>
+       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateLname")} >
+       <Text> Last name : {r.get("last_name")}</Text>
+       </TouchableOpacity>
+       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateEmail")} >
+       <Text> Email : {r.get("email")}</Text>
+       </TouchableOpacity>
+       <Button title="Update Password" onPress={() => this.props.navigation.navigate("updatePassword")} />
+
 
          
-
+      
          
 
         </View>
@@ -109,7 +127,7 @@ container: {
   flex:1,
 },
 text: {
-  fontSize: 24,
+  fontSize: 34,
   fontWeight: 'bold',
 },
 });

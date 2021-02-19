@@ -50,7 +50,7 @@ class LocationReviews extends Component {
         
         <Button
         title="Find"
-        onPress={() => navigation.navigate("findlocation")} />
+        onPress={() => this.props.navigation.navigate("findlocation")} />
   
           <Button title="Go home" onPress={() => navigation.navigate('Home')} />
         </View>
