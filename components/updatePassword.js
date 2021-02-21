@@ -96,7 +96,7 @@ class updatePassword extends Component {
           <Text>Update user credentials</Text>
 
           <TextInput
-            placeholder="Enter first name"
+            placeholder="Enter password ..."
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             style={{padding: 5, borderWidth: 1, margin: 5}}

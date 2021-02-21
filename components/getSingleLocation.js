@@ -12,15 +12,7 @@ class getSingleLocation extends Component {
       isLoading: true,
     location: null,
     location_id: "",
-  location_name: "",
-  location_town: "",
-  latitude: 0,
-  longitude: 0,
-  photo_path: "",
-  avg_overall_rating: 0,
-  avg_price_rating: 0,
-  avg_quality_rating: 0,
-  avg_clenliness_rating: 0,
+  
   infoData: [],
     };
   }
@@ -28,7 +20,7 @@ class getSingleLocation extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-     // const location_id = this.props.route.params.location_id;
+     this.getInfo();
 
      
     });
@@ -75,7 +67,7 @@ class getSingleLocation extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          infoData: JSON.stringify(responseJson)
+          infoData: responseJson
         });
         ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
         console.log(location_id);
@@ -91,6 +83,8 @@ class getSingleLocation extends Component {
   render() {
     const navigation = this.props.navigation;
     const data = this.state.infoData;
+    const myMap = new Map(Object.entries(data));
+
 
 
     if (this.state.isLoading) {
@@ -102,19 +96,69 @@ class getSingleLocation extends Component {
     } else {
       return (
         
-        <View>
+        <ScrollView>
         
           
            <Button title="Get Info for single loc" onPress={() => this.getInfo()} />
-           <Button title="Add review for this location" onPress={() => this.props.navigation.navigate("Add review")} />
-           <Text>{data}</Text>
+           <Button title="Add review for this location" onPress={() => this.props.navigation.navigate("Add review", {location_id: myMap.get("location_id")})} />
+           <Text style={{fontSize: 22, color: 'black'}}>
+             Favourite Locations 
+                </Text>
+                
+              <Text>{"\n"}Location_ID: {myMap.get("location_id")}
+              {"\n"}
+              Location_Name: {myMap.get("location_name")}
+              {"\n"}
+              Location_Town: {myMap.get("location_town")}
+              {"\n"}
+              Latitude: {myMap.get("latitude")}
+              {"\n"}
+              Longitude: {myMap.get("longitude")}
+              {"\n"}
+              Photo_Path: {myMap.get("photo_path")}
+              {"\n"}
+              Avg_Overall_Rating: {myMap.get("avg_overall_rating")}
+              {"\n"}
+              Avg_Price_Rating: {myMap.get("avg_price_rating")}
+              {"\n"}
+              Avg_Quality_Rating: {myMap.get("avg_quality_rating")}
+              {"\n"}
+              Avg_Cleanliness_Rating: {myMap.get("avg_clenliness_rating")}
+              {"\n"}
+            </Text>
+            <Text style={{fontSize:22, color: 'black'}}>
+              Location Reviews
+            </Text>
+            <Text>
+            {"\n"}Review_ID: {myMap.get("review_id")}
+              {"\n"}
+              Overall_Rating: {myMap.get("overall_rating")}
+              {"\n"}
+              Price_Rating: {myMap.get("price_rating")}
+              {"\n"}
+              Quality_Rating: {myMap.get("quality_rating")}
+              {"\n"}
+              Cleanliness_Rating: {myMap.get("clenliness_rating")}
+              {"\n"}
+              Review_body: {myMap.get("review_body")}
+              {"\n"}
+              Likes: {myMap.get("likes")}
+
+
+
+            </Text>
+
+
+
+
+
 
         
            
 
          
 
-        </View>
+        </ScrollView>
       );
     }
   }

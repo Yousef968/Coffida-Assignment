@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  ToastAndroid,
+  Alert,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FlatList } from 'react-native-gesture-handler';
 
 class GetUserInfo extends Component {
   constructor(props) {
@@ -9,10 +17,7 @@ class GetUserInfo extends Component {
 
     this.state = {
       isLoading: true,
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
+
       userData: [],
     };
   }
@@ -34,13 +39,12 @@ class GetUserInfo extends Component {
       Alert.alert('You need to be logged in to view this page');
       //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
-    } else{
+    } else {
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
-  }
-
+  };
 
   getInfo = async () => {
     //Validation Here
@@ -49,12 +53,12 @@ class GetUserInfo extends Component {
     console.log(id);
     return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
       headers: {
-        'X-Authorization': value, 
+        'X-Authorization': value,
       },
     })
       .then((response) => {
         if (response.status === 200) {
-          return response.json()
+          return response.json();
         } else if (response.status === 401) {
           throw 'Unauthorised';
         } else {
@@ -65,9 +69,8 @@ class GetUserInfo extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          userData: responseJson       
+          userData: responseJson,       
         });
-        ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
         console.log(this.state.userData);
       })
       .catch((error) => {
@@ -77,11 +80,10 @@ class GetUserInfo extends Component {
   };
 
   render() {
-   const data = this.state.userData;
-   const data1= Object.values(data);
-   let r = new Map(Object.entries(data));
-   console.log(r);
-   
+    const data = this.state.userData;
+    const myMap = new Map(Object.entries(data));
+    console.log(myMap);
+
 
     if (this.state.isLoading) {
       return (
@@ -91,45 +93,85 @@ class GetUserInfo extends Component {
       );
     } else {
       return (
-        
-        <View>
-          <Text style={{fontSize:22,color: 'red'}}>
-Click on the details you wish to update!
-{"\n"}
+        <ScrollView>
+          <Text style={{fontSize: 20, color: 'red'}}>
+            Click on the user details you wish to update!
+            {'\n'}
           </Text>
-         
-         
-       <Text> User ID:{r.get("user_id")}</Text>
-       
-       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateFname")} >
-       <Text> First name : {r.get("first_name")}</Text>
-       </TouchableOpacity>
-       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateLname")} >
-       <Text> Last name : {r.get("last_name")}</Text>
-       </TouchableOpacity>
-       <TouchableOpacity onPress={() => this.props.navigation.navigate("updateEmail")} >
-       <Text> Email : {r.get("email")}</Text>
-       </TouchableOpacity>
-       <Button title="Update Password" onPress={() => this.props.navigation.navigate("updatePassword")} />
+
+          <Text> User ID: {myMap.get('user_id')}</Text>
+
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('update first name')}>
+            <Text> First name : {myMap.get('first_name')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('update last name')}>
+            <Text> Last name : {myMap.get('last_name')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('update email')}>
+            <Text> Email : {myMap.get('email')}</Text>
+          </TouchableOpacity>
+          <Button
+            title="Update Password"
+            onPress={() => this.props.navigation.navigate('update password')} />
+                    <Text> {"\n"} </Text>     
+            <Text style={{fontSize: 22, color: 'black'}}>
+             Favourite Locations 
+                </Text>
+                
+              <Text>{"\n"}Location_ID: {myMap.get("location_id")}
+              {"\n"}
+              Location_Name: {myMap.get("location_name")}
+              {"\n"}
+              Location_Town: {myMap.get("location_town")}
+              {"\n"}
+              Latitude: {myMap.get("latitude")}
+              {"\n"}
+              Longitude: {myMap.get("longitude")}
+              {"\n"}
+              Photo_Path: {myMap.get("photo_path")}
+              {"\n"}
+              Avg_Overall_Rating: {myMap.get("avg_overall_rating")}
+              {"\n"}
+              Avg_Price_Rating: {myMap.get("avg_price_rating")}
+              {"\n"}
+              Avg_Quality_Rating: {myMap.get("avg_quality_rating")}
+              {"\n"}
+              Avg_Cleanliness_Rating: {myMap.get("avg_clenliness_rating")}
+              {"\n"}
+            </Text>
+            <Text style={{fontSize:22, color: 'black'}}>
+              Location Reviews
+            </Text>
+            <Text>
+            {"\n"}Review_ID: {myMap.get("review_id")}
+              {"\n"}
+              Overall_Rating: {myMap.get("overall_rating")}
+              {"\n"}
+              Price_Rating: {myMap.get("price_rating")}
+              {"\n"}
+              Quality_Rating: {myMap.get("quality_rating")}
+              {"\n"}
+              Cleanliness_Rating: {myMap.get("clenliness_rating")}
+              {"\n"}
+              Review_body: {myMap.get("review_body")}
+              {"\n"}
+              Likes: {myMap.get("likes")}
 
 
-         
-      
-         
 
-        </View>
+            </Text>
+
+
+
+
+        </ScrollView>
       );
     }
   }
 }
-const styles = StyleSheet.create({
-container: {
-  flex:1,
-},
-text: {
-  fontSize: 34,
-  fontWeight: 'bold',
-},
-});
+
 
 export default GetUserInfo;

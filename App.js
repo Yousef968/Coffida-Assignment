@@ -27,6 +27,7 @@ import updateFname from'./components/updateFname';
 import updateLname from './components/updateLname';
 import updateEmail from './components/updateEmail';
 import updatePassword from './components/updatePassword';
+import Search from './components/Search';
 
 
 const Tab = createBottomTabNavigator();
@@ -48,15 +49,16 @@ class App extends Component {
           <Stack.Screen name="Account Management" component={UserManagement}   />
           
           <Stack.Screen name="Sign Up" component={Signup} /> 
-    <Stack.Screen name="updateFname" component={updateFname} />
-    <Stack.Screen name="updateLname" component={updateLname} />
-    <Stack.Screen name="updateEmail" component={updateEmail} />
-    <Stack.Screen name="updatePassword" component={updatePassword} />
+    <Stack.Screen name="update first name" component={updateFname} />
+    <Stack.Screen name="update last name" component={updateLname} />
+    <Stack.Screen name="update email" component={updateEmail} />
+    <Stack.Screen name="update password" component={updatePassword} />
           <Stack.Screen name="UpdateUser" component={UpdateUser} />
           <Stack.Screen name="GetUserInfo" component={GetUserInfo} />
           <Stack.Screen name="updateUserOption" component={updateUserOption} />
           <Stack.Screen name="findlocation" component={findLocation} />
           <Stack.Screen name="getSingleLocation" component={getSingleLocation} />
+          <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Add review" component={AddReview} />
 
           </Stack.Navigator>

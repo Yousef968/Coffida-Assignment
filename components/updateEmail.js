@@ -96,7 +96,7 @@ class updateEmail extends Component {
           <Text>Update user credentials</Text>
 
           <TextInput
-            placeholder="Enter first name"
+            placeholder="Enter email...."
             onChangeText={(email) => this.setState({email})}
             value={this.state.email}
             style={{padding: 5, borderWidth: 1, margin: 5}}

@@ -149,6 +149,7 @@ class findLocation extends Component {
           )}
           keyExtractor ={(item, index) => item.location_id.toString()}
           />
+          <Button title="Filter search" onPress={() => this.props.navigation.navigate("Search")} />
            
 
          

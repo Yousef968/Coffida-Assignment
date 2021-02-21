@@ -11,7 +11,7 @@ class AddReview extends Component {
     this.state = {
       isLoading: true,
       location: null,
-      location_id: "",
+      location_id: '',
       overall_rating: '',
       price_rating: '',
       quality_rating: '',
@@ -33,6 +33,7 @@ class AddReview extends Component {
 
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
+
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
