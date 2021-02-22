@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  Button,
-  ToastAndroid,
-  ActivityIndicator,
-  FlatList,
-  Alert,
-} from 'react-native';
+import { Text,View,ToastAndroid, ActivityIndicator, FlatList,  Alert,} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TextInput} from 'react-native-gesture-handler';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating, AirbnbRating , Button} from 'react-native-elements';
+
+
 
 class Search extends Component {
   constructor(props) {
@@ -21,6 +15,9 @@ class Search extends Component {
       locations: null,
       query: '',
       overall_rating: 0,
+      price_rating:0,
+      quality_rating:0,
+      clenliness_rating:0,
     };
   }
 
@@ -92,6 +89,15 @@ class Search extends Component {
     if (this.state.overall_rating > 0) {
       url += 'overall_ratings' + this.state.overall_rating + '&';
     }
+    if (this.state.price_rating > 0) {
+      url += 'price_ratings' + this.state.price_rating + '&';
+    }
+    if (this.state.quality_rating > 0) {
+      url += 'quality_ratings' + this.state.quality_rating + '&';
+    }
+    if (this.state.clenliness_rating > 0) {
+      url += 'clenliness_ratings' + this.state.clenliness_rating + '&';
+    }
     this.GetSearchInfo(url);
   };
 
@@ -124,13 +130,31 @@ class Search extends Component {
             onChangeText={(query) => this.setState({query: query})}
             style={{padding: 5, borderWidth: 1, margin: 5}}
           />
-          <Text>Overall Rating</Text>
-          <AirbnbRating
+<Text style={{fontSize: 20, color: 'black'}}>Overall Rating</Text>          
+<AirbnbRating
           size={15}
           defaultRating={0}
           onFinishedRating={(rating) => this.ratingCompleted(rating, "overall_rating")} 
           />
-          <Button title="Get Info" onPress={() => this.Search()} />
+<Text style={{fontSize: 20, color: 'black'}}>Price Rating</Text>          
+<AirbnbRating
+          size={15}
+          defaultRating={0}
+          onFinishedRating={(rating) => this.ratingCompleted(rating, "price_rating")} 
+          />
+<Text style={{fontSize: 20, color: 'black'}}>Quality Rating</Text>          
+<AirbnbRating
+          size={15}
+          defaultRating={0}
+          onFinishedRating={(rating) => this.ratingCompleted(rating, "quality_rating")} 
+          />
+<Text style={{fontSize: 20, color: 'black'}}>Clenliness Rating</Text>         
+ <AirbnbRating
+          size={15}
+          defaultRating={0}
+          onFinishedRating={(rating) => this.ratingCompleted(rating, "clenliness_rating")} 
+          />
+          <Button title="Search" onPress={() => this.Search()} />
           <FlatList
             data={this.state.listData}
             renderItem={({item}) => (

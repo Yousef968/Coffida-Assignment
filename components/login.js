@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Button, ToastAndroid, View} from 'react-native';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
+import {ToastAndroid, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
 
 class Login extends Component {
   constructor(props) {
@@ -65,10 +66,6 @@ class Login extends Component {
           secureTextEntry={true}
         />
         <Button title="Login" onPress={() => this.login()} />
-        <Button
-          title="Go to home"
-          onPress={() => navigation.navigate('Home')}
-        />
       </View>
     );
   }

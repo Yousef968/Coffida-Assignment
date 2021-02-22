@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList,ScrollView} from 'react-native';
+import {Text, View,ToastAndroid, Alert, ActivityIndicator,  FlatList,  ScrollView,} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Thumbnail } from 'native-base';
+import { Button } from 'react-native-elements';
+
 
 class getSingleLocation extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-
       isLoading: true,
-    location: null,
-    location_id: "",
-  
+      location: null,
+      location_id: '',
+
+
   infoData: [],
     };
   }
@@ -20,9 +21,7 @@ class getSingleLocation extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-     this.getInfo();
-
-     
+      this.getInfo();
     });
   }
   componentWillUnmount() {
@@ -36,27 +35,26 @@ class getSingleLocation extends Component {
       Alert.alert('You need to be logged in to view this page');
       //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
-    } else{
+    } else {
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
-  }
-
+  };
 
   getInfo = async () => {
     //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const location_id = this.props.route.params.location_id;
-    
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id , {
+
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id, {
       headers: {
-        'X-Authorization': value, 
+        'X-Authorization': value,
       },
     })
       .then((response) => {
         if (response.status === 200) {
-          return response.json()
+          return response.json();
         } else if (response.status === 401) {
           throw 'Unauthorised';
         } else {
@@ -67,9 +65,12 @@ class getSingleLocation extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          infoData: responseJson
+          infoData: responseJson,
         });
-        ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+        ToastAndroid.show(
+          'Details for this location revealed',
+          ToastAndroid.SHORT,
+        );
         console.log(location_id);
       })
       .catch((error) => {
@@ -77,15 +78,12 @@ class getSingleLocation extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
-  
-  
+
 
   render() {
     const navigation = this.props.navigation;
     const data = this.state.infoData;
     const myMap = new Map(Object.entries(data));
-
-
 
     if (this.state.isLoading) {
       return (
@@ -95,68 +93,60 @@ class getSingleLocation extends Component {
       );
     } else {
       return (
-        
         <ScrollView>
-        
-          
-           <Button title="Get Info for single loc" onPress={() => this.getInfo()} />
-           <Button title="Add review for this location" onPress={() => this.props.navigation.navigate("Add review", {location_id: myMap.get("location_id")})} />
-           <Text style={{fontSize: 22, color: 'black'}}>
-             Favourite Locations 
-                </Text>
-                
-              <Text>{"\n"}Location_ID: {myMap.get("location_id")}
-              {"\n"}
-              Location_Name: {myMap.get("location_name")}
-              {"\n"}
-              Location_Town: {myMap.get("location_town")}
-              {"\n"}
-              Latitude: {myMap.get("latitude")}
-              {"\n"}
-              Longitude: {myMap.get("longitude")}
-              {"\n"}
-              Photo_Path: {myMap.get("photo_path")}
-              {"\n"}
-              Avg_Overall_Rating: {myMap.get("avg_overall_rating")}
-              {"\n"}
-              Avg_Price_Rating: {myMap.get("avg_price_rating")}
-              {"\n"}
-              Avg_Quality_Rating: {myMap.get("avg_quality_rating")}
-              {"\n"}
-              Avg_Cleanliness_Rating: {myMap.get("avg_clenliness_rating")}
-              {"\n"}
-            </Text>
-            <Text style={{fontSize:22, color: 'black'}}>
-              Location Reviews
-            </Text>
+
+
+
+           <Button title="Add review for this location"
+            onPress={() =>
+              this.props.navigation.navigate('Add review', {
+                location_id: myMap.get('location_id'),
+              })
+            }
+          />
+
+          <Text style={{fontSize: 22, color: 'black'}}>
+            Favourite Locations
+          </Text>
+
             <Text>
-            {"\n"}Review_ID: {myMap.get("review_id")}
-              {"\n"}
-              Overall_Rating: {myMap.get("overall_rating")}
-              {"\n"}
-              Price_Rating: {myMap.get("price_rating")}
-              {"\n"}
-              Quality_Rating: {myMap.get("quality_rating")}
-              {"\n"}
-              Cleanliness_Rating: {myMap.get("clenliness_rating")}
-              {"\n"}
-              Review_body: {myMap.get("review_body")}
-              {"\n"}
-              Likes: {myMap.get("likes")}
-
-
-
-            </Text>
-
-
-
-
-
-
-        
-           
-
-         
+            {'\n'}Location_ID: {myMap.get('location_id')}
+            {'\n'}
+            Location_Name: {myMap.get('location_name')}
+            {'\n'}
+            Location_Town: {myMap.get('location_town')}
+            {'\n'}
+            Latitude: {myMap.get('latitude')}
+            {'\n'}
+            Longitude: {myMap.get('longitude')}
+            {'\n'}
+            Photo_Path: {myMap.get('photo_path')}
+            {'\n'}
+            Avg_Overall_Rating: {myMap.get('avg_overall_rating')}
+            {'\n'}
+            Avg_Price_Rating: {myMap.get('avg_price_rating')}
+            {'\n'}
+            Avg_Quality_Rating: {myMap.get('avg_quality_rating')}
+            {'\n'}
+            Avg_Cleanliness_Rating: {myMap.get('avg_clenliness_rating')}
+            {'\n'}
+          </Text>
+          <Text style={{fontSize: 22, color: 'black'}}>Location Reviews</Text>
+          <Text>
+            {'\n'}Review_ID: {myMap.get('review_id')}
+            {'\n'}
+            Overall_Rating: {myMap.get('overall_rating')}
+            {'\n'}
+            Price_Rating: {myMap.get('price_rating')}
+            {'\n'}
+            Quality_Rating: {myMap.get('quality_rating')}
+            {'\n'}
+            Cleanliness_Rating: {myMap.get('clenliness_rating')}
+            {'\n'}
+            Review_body: {myMap.get('review_body')}
+            {'\n'}
+            Likes: {myMap.get('likes')}
+          </Text>
 
         </ScrollView>
       );

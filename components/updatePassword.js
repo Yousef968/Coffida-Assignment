@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Button, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
 
 class updatePassword extends Component {
   constructor(props) {

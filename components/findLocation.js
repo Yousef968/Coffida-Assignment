@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
+import {Text, View,ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Thumbnail } from 'native-base';
+import { Button } from 'react-native-elements';
 
 class findLocation extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class findLocation extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      //this.getInfo();
+      this.getInfo();
     });
   }
   componentWillUnmount() {
@@ -66,7 +66,7 @@ class findLocation extends Component {
           isLoading: false,
           listData: responseJson
         });
-        ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+        ToastAndroid.show('Locations revealed', ToastAndroid.SHORT);
       })
       .catch((error) => {
         console.log(error);
@@ -122,7 +122,7 @@ class findLocation extends Component {
         <View>
         
           
-           <Button title="Get Info" onPress={() => this.getInfo()} />
+           
 
            <FlatList
           data = {this.state.listData}
@@ -131,11 +131,11 @@ class findLocation extends Component {
             <View>
                
               
-              
+            <Text style={{fontSize: 18, color: 'black'}}>Location id = {parseInt(item.location_id)}</Text>    
                
-               
-             <Text>  Location id = {parseInt(item.location_id)} </Text>
-             <Text> Location name = {item.location_name}</Text>
+             
+        
+             <Text style={{fontSize:18, color: 'black'}}>Location name = {item.location_name}</Text>
         
 
 
@@ -159,5 +159,12 @@ class findLocation extends Component {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+    backgroundColor: 'pink',
+  },
+});
 
 export default findLocation;

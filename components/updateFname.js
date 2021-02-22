@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, Button, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
+
 
 class updateFname extends Component {
   constructor(props) {
@@ -38,7 +40,6 @@ class updateFname extends Component {
 };
 
   updateUser = async () => {
-    let to_send = {};
 
     const value = await AsyncStorage.getItem('@session_token');
     const id = await AsyncStorage.getItem('@user_id');

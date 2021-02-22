@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, Button, ToastAndroid, Alert,Text, StyleSheet} from 'react-native';
+import {View,ToastAndroid, Text, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
+
 
 class UserManagement extends Component {
   constructor(props) {
@@ -48,24 +50,30 @@ class UserManagement extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View >
+      <View style={styles.container} >
         <Text style={styles.text}>
           User Management
         </Text>
+        <View style={styles.space} />
         <Button
           title="Sign Up"
           onPress={() => navigation.navigate('Sign Up')}
+          
         />
+              <View style={styles.space} />
+
+        
         <Button title="Login" onPress={() => navigation.navigate('Login')} />
-        <Button
-          title="Update User Credentials"
-          onPress={() => navigation.navigate('UpdateUser')}
-        />
+        <View style={styles.space} />
+
         <Button
           title="Get user information"
           onPress={() => navigation.navigate('GetUserInfo')}
         />
-        <Button title="Logout" onPress={() => this.logout()} />
+                <View style={styles.space} />
+
+        <Button title="Logout" onPress={() => this.logout()} /> 
+        
       </View>
     );
   }
@@ -75,8 +83,19 @@ const styles = StyleSheet.create({
     flex:1,
   },
   text: {
-    fontSize: 24,
+    textAlign:'center',
+    fontSize: 30,
     fontWeight: 'bold',
+  },
+  space: {
+    height: 40,
+ 
+  },
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    backgroundColor: 'pink',
   },
   });
   

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Button, ToastAndroid} from 'react-native';
+import {ToastAndroid} from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
+import { Button } from 'react-native-elements';
 
 class SignupScreen extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class SignupScreen extends Component {
   };
   render() {
     return (
-      <ScrollView>
+      <ScrollView >
         <TextInput
           placeholder="Enter your first name..."
           onChangeText={(first_name) => this.setState({first_name})}
@@ -74,5 +75,6 @@ class SignupScreen extends Component {
     );
   }
 }
+
 
 export default SignupScreen;

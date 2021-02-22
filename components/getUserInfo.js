@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  Button,
-  ToastAndroid,
-  Alert,
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
 
 class GetUserInfo extends Component {
   constructor(props) {

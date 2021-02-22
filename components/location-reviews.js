@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Text, View, Button, ToastAndroid, Alert, ActivityIndicator, StyleSheet} from 'react-native';
+import {StyleSheet, View,ToastAndroid, Alert, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-elements';
+
 
 class LocationReviews extends Component {
   constructor(props) {
@@ -45,18 +47,27 @@ class LocationReviews extends Component {
       );
     } else {
       return (
-        <View>
-          <Text>This is P3</Text>
+        <View style={styles.container}>
+         
         
         <Button
-        title="Find"
+        title="Find Locations"
+        
         onPress={() => this.props.navigation.navigate("findlocation")} />
   
-          <Button title="Go home" onPress={() => navigation.navigate('Home')} />
+          
         </View>
       );
     }
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    backgroundColor: 'pink',
+  },
+});
 
 export default LocationReviews;
