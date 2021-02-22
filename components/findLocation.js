@@ -127,7 +127,7 @@ class findLocation extends Component {
            <FlatList
           data = {this.state.listData}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {location_id: item.location_id})} >
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {loc_id: item.location_id})} >
             <View>
                
               

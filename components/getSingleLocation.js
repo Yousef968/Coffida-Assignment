@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View,ToastAndroid, Alert, ActivityIndicator,  FlatList,  ScrollView,} from 'react-native';
+import {Text, View,ToastAndroid, Alert, ActivityIndicator,  FlatList,  ScrollView,TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 
@@ -14,7 +14,7 @@ class getSingleLocation extends Component {
       location_id: '',
 
 
-  infoData: [],
+      userData: [],
     };
   }
 
@@ -45,9 +45,9 @@ class getSingleLocation extends Component {
   getInfo = async () => {
     //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
-    const location_id = this.props.route.params.location_id;
+    const loc_id = this.props.route.params.loc_id;
 
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id, {
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id, {
       headers: {
         'X-Authorization': value,
       },
@@ -65,13 +65,13 @@ class getSingleLocation extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          infoData: responseJson,
+          userData: responseJson,
         });
         ToastAndroid.show(
           'Details for this location revealed',
           ToastAndroid.SHORT,
         );
-        console.log(location_id);
+        console.log(loc_id);
       })
       .catch((error) => {
         console.log(error);
@@ -82,7 +82,7 @@ class getSingleLocation extends Component {
 
   render() {
     const navigation = this.props.navigation;
-    const data = this.state.infoData;
+    const data = this.state.userData;
     const myMap = new Map(Object.entries(data));
 
     if (this.state.isLoading) {
@@ -93,20 +93,19 @@ class getSingleLocation extends Component {
       );
     } else {
       return (
-        <ScrollView>
-
+<View style={{ flex:1, width: '100%'}}>
 
 
            <Button title="Add review for this location"
             onPress={() =>
               this.props.navigation.navigate('Add review', {
-                location_id: myMap.get('location_id'),
+                loc_id: myMap.get('location_id'),
               })
             }
           />
 
           <Text style={{fontSize: 22, color: 'black'}}>
-            Favourite Locations
+            Location
           </Text>
 
             <Text>
@@ -131,24 +130,34 @@ class getSingleLocation extends Component {
             Avg_Cleanliness_Rating: {myMap.get('avg_clenliness_rating')}
             {'\n'}
           </Text>
-          <Text style={{fontSize: 22, color: 'black'}}>Location Reviews</Text>
-          <Text>
-            {'\n'}Review_ID: {myMap.get('review_id')}
-            {'\n'}
-            Overall_Rating: {myMap.get('overall_rating')}
-            {'\n'}
-            Price_Rating: {myMap.get('price_rating')}
-            {'\n'}
-            Quality_Rating: {myMap.get('quality_rating')}
-            {'\n'}
-            Cleanliness_Rating: {myMap.get('clenliness_rating')}
-            {'\n'}
-            Review_body: {myMap.get('review_body')}
-            {'\n'}
-            Likes: {myMap.get('likes')}
-          </Text>
+          <Text style={{fontSize: 22, color: 'black'}}>
+            Reviews
+            </Text>
+            
+            <FlatList
+          data = {this.state.userData.reviews}
+          renderItem={({item}) => (
+            <View>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id})} >
+           <Text>Review ID: {item.review.review_id}             </Text>
 
-        </ScrollView>
+           </TouchableOpacity>
+           <Text>Overall rating: {item.review.overall_rating} </Text>
+           <Text>Price rating: {item.review.price_rating} </Text>
+           <Text>Quality rating: {item.review.quality_rating} </Text>
+           <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
+           <Text>Review body: {item.review.review_body} </Text>
+           <Text>Likes rating: {item.review.likes} </Text>
+           </View>
+            )}
+          keyExtractor ={(item) => item.review.review_id.toString()}          />
+        
+          
+
+
+          
+
+        </View>
       );
     }
   }

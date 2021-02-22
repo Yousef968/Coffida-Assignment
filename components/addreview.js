@@ -10,8 +10,6 @@ class AddReview extends Component {
 
     this.state = {
       isLoading: true,
-      location: null,
-      location_id: '',
       overall_rating: '',
       price_rating: '',
       quality_rating: '',
@@ -28,7 +26,6 @@ class AddReview extends Component {
   }
   componentWillUnmount() {
     this.unsubscribe();
-    console.log(this.props);
   }
 
   checkLoggedIn = async () => {
@@ -46,26 +43,31 @@ class AddReview extends Component {
     }
   };
   addreview = async () => {
-    //Validation Here
+    let to_send = {};
     const value = await AsyncStorage.getItem('@session_token');
-    const location_id = this.props.route.params.location_id;
+    const loc_id = this.props.route.params.loc_id;
+    
+     to_send.overall_rating = parseInt(this.state.overall_rating);
+     to_send.price_rating = parseInt(this.state.price_rating);
+     to_send.quality_rating = parseInt(this.state.quality_rating);
+     to_send.clenliness_rating = parseInt(this.state.clenliness_rating);
+     to_send.review_body = (this.state.review_body);
+
     
 
-    console.log(this.props);
-
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review', 
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/'+ loc_id + '/review', 
       {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
           'X-Authorization': value,
         },
-        body: JSON.stringify(this.state),
-      },
-    )
+        body: JSON.stringify(to_send),
+        
+      })
       .then((response) => {
         if (response.status === 201) {
-          return response.json();
+        //  return response.json();
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {
@@ -73,8 +75,9 @@ class AddReview extends Component {
         }
       })
       .then(async (responseJson) => {
-        console.log('User created with ID', responseJson);
-        ToastAndroid.show('User created', ToastAndroid.SHORT);
+        console.log('Response added', responseJson);
+        ToastAndroid.show('Response added', ToastAndroid.SHORT);
+        this.props.navigation.navigate("Home");
       })
       .catch((error) => {
         console.log(error);
@@ -110,7 +113,6 @@ class AddReview extends Component {
           }
           value={this.state.cleanliness_rating}
           style={{padding: 5, borderWidth: 1, margin: 5}}
-          secureTextEntry={true}
         />
         <TextInput
           placeholder="Enter review body"

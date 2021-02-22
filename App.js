@@ -23,7 +23,8 @@ import updateLname from './components/updateLname';
 import updateEmail from './components/updateEmail';
 import updatePassword from './components/updatePassword';
 import Search from './components/Search';
-
+import HandleReviews from './components/HandleReviews';
+import usersReviews from './components/usersReviews';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -54,6 +55,9 @@ class App extends Component {
           <Stack.Screen name="Search" component={Search} options={{ title: 'Filter search' }} />
           <Stack.Screen name="Add review" component={AddReview} options={{ title: 'Add a review' }}/>
           <Stack.Screen name="LocationReviews" component={LocationReviews} options={{ title: 'Locations and Reviews' }} />
+          <Stack.Screen name="HandleReviews" component={HandleReviews} options={{ title: 'Locations and Reviews' }} />
+          <Stack.Screen name="usersReviews" component={usersReviews} options={{ title: 'Locations and Reviews' }} />
+
 
 
           </Stack.Navigator>
