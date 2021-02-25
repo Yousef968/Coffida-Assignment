@@ -123,32 +123,32 @@ class Search extends Component {
       return (
         <View>
           
-          <Text style={{fontSize: 20, color: 'black'}}>Search</Text>
+          <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Search</Text>
           <TextInput
             placeholder="Enter your search"
             value={this.state.query}
             onChangeText={(query) => this.setState({query: query})}
             style={{padding: 5, borderWidth: 1, margin: 5}}
           />
-<Text style={{fontSize: 20, color: 'black'}}>Overall Rating</Text>          
+<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Overall Rating</Text>          
 <AirbnbRating
           size={15}
           defaultRating={0}
           onFinishedRating={(rating) => this.ratingCompleted(rating, "overall_rating")} 
           />
-<Text style={{fontSize: 20, color: 'black'}}>Price Rating</Text>          
+<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Price Rating</Text>          
 <AirbnbRating
           size={15}
           defaultRating={0}
           onFinishedRating={(rating) => this.ratingCompleted(rating, "price_rating")} 
           />
-<Text style={{fontSize: 20, color: 'black'}}>Quality Rating</Text>          
+<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Quality Rating</Text>          
 <AirbnbRating
           size={15}
           defaultRating={0}
           onFinishedRating={(rating) => this.ratingCompleted(rating, "quality_rating")} 
           />
-<Text style={{fontSize: 20, color: 'black'}}>Clenliness Rating</Text>         
+<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Clenliness Rating</Text>         
  <AirbnbRating
           size={15}
           defaultRating={0}

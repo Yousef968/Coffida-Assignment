@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View,ToastAndroid, Alert, ActivityIndicator,  FlatList,  ScrollView,TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  ToastAndroid,
+  Alert,
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
 
 
 class getSingleLocation extends Component {
@@ -41,6 +49,89 @@ class getSingleLocation extends Component {
       });
     }
   };
+  unfavLoc = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    const loc_id = this.props.route.params.loc_id;
+
+    return fetch(
+      'http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/favourite',
+      {
+        method: 'delete',
+        headers: {
+          'X-Authorization': value,
+        },
+      },
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Location unfavourited');
+
+
+    } else if (response.status === 401) {
+      throw 'Unauthorised';
+    } else {
+      throw 'Something went wrong';
+    }
+  })
+  
+
+  .then(async () => {
+    this.setState({
+      isLoading: false,
+      
+    });
+    ToastAndroid.show('Location unfavourited',ToastAndroid.SHORT);
+    
+  })
+  .catch((error) => {
+    console.log(error);
+    ToastAndroid.show('Error!', ToastAndroid.SHORT);
+  });
+
+}
+
+
+  favLoc = async () => {
+    //Validation Here
+    const value = await AsyncStorage.getItem('@session_token');
+    const loc_id = this.props.route.params.loc_id;
+
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/favourite' , {
+      method: 'post',
+      headers: {
+        'X-Authorization': value,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Location favourited");
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else {
+          throw 'Something went wrong';
+        }
+      })
+      
+
+      .then(async () => {
+        this.setState({
+          isLoading: false,
+          
+        });
+        ToastAndroid.show('Location favourited',ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
+  
+
+
+
+
+
+  
 
   getInfo = async () => {
     //Validation Here
@@ -84,6 +175,7 @@ class getSingleLocation extends Component {
     const navigation = this.props.navigation;
     const data = this.state.userData;
     const myMap = new Map(Object.entries(data));
+    console.log(this.state.userData);
 
     if (this.state.isLoading) {
       return (
@@ -93,7 +185,7 @@ class getSingleLocation extends Component {
       );
     } else {
       return (
-<View style={{ flex:1, width: '100%'}}>
+<View>
 
 
            <Button title="Add review for this location"
@@ -102,6 +194,17 @@ class getSingleLocation extends Component {
                 loc_id: myMap.get('location_id'),
               })
             }
+          />
+          <View style={{marginBottom:10}}></View>
+          <Button
+          title="Favourite this location"
+          onPress={() => this.favLoc()}
+
+          />
+          <View style={{marginBottom:10}}></View>
+            <Button
+          title="Unfavourite this location"
+          onPress={() => this.unfavLoc()}
           />
 
           <Text style={{fontSize: 22, color: 'black'}}>

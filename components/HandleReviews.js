@@ -42,7 +42,7 @@ class HandleReviews extends Component {
 
     
 
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/'+ loc_id + '/review' + rev_id, 
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/'+ loc_id + '/' + 'review/' + rev_id, 
       {
         method: 'delete',
         headers: {
@@ -51,7 +51,7 @@ class HandleReviews extends Component {
         
       })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
             console.log("Deleted the review");
         } else if (response.status === 400) {
           throw 'Failed Validation';
@@ -61,6 +61,7 @@ class HandleReviews extends Component {
       })
       .then(async () => {
         ToastAndroid.show('Deleted your review', ToastAndroid.SHORT);
+        this.props.navigation.navigate('Home');
         this.props.navigation.navigate('Home');
       })
       .catch((error) => {
@@ -78,12 +79,7 @@ class HandleReviews extends Component {
         <Text style={styles.text}>
            Coffida App</Text>
 <View style={styles.space} />
-        <Button 
-          title="Update this review"
-          type="solid"
-          
-          onPress={() => navigation.navigate('Account Management')}
-        />
+        
         <View style={styles.space} />
      
         <Button title="Delete this review"

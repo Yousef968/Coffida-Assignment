@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
+import { Text, View,ToastAndroid, Alert,  ActivityIndicator, StyleSheet, TouchableOpacity,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 
@@ -88,7 +88,7 @@ class GetUserInfo extends Component {
       );
     } else {
       return (
-        <View>
+         <View style={styles.container}>
         
           <Text style={{fontSize: 20, color: 'red'}}>
             Click on the user details you wish to update!
@@ -109,77 +109,32 @@ class GetUserInfo extends Component {
             onPress={() => this.props.navigation.navigate('update email')}>
             <Text> Email : {myMap.get('email')}</Text>
           </TouchableOpacity>
+          <View style={styles.space} />
           <Button
             title="Update Password"
             onPress={() => this.props.navigation.navigate('update password')} />
-                    <Text> {"\n"} </Text>
+            <View style={styles.space} />
+            <Button 
+            title = "Get your fav locations"
+            onPress={() => this.props.navigation.navigate('favLocations')} />
+            <View style={styles.space} />
+                    
                     <Button
             title="Get your reviews"
             onPress={() => this.props.navigation.navigate('usersReviews')} /> 
-            <Text style={{fontSize: 22, color: 'black'}}>
-             Favourite Locations 
-                </Text>
-                <FlatList
-          data = {this.state.userData.reviews}
-          renderItem={({item}) => (
-            <View>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id})} >
-           <Text>Location ID: {item.location.location_id}             </Text>
-
-           </TouchableOpacity>
-           <Text>Location name: {item.location.location_name} </Text>
-           <Text>Location town: {item.location.location_town} </Text>
-           <Text>Latitude: {item.location.latitude} </Text>
-           <Text>Longitude: {item.location.longitude} </Text>
-           <Text>Photo Path: {item.location.photo_path} </Text>
-           <Text>Avg Overall Rating: {item.location.avg_overall_rating} </Text>
-           <Text>Avg PriceRating: {item.location.avg_price_rating} </Text>
-           <Text>Avg Quality Rating: {item.location.avg_quality_rating} </Text>
-           <Text>Avg Clenliness Rating: {item.location.avg_clenliness_rating} </Text>
-
-        
-
-
-
-
-
-
-
-            </View>
-          )}
-          keyExtractor ={(item, index) => item.location.location_id.toString()}  />            
-             
             
-            <Text style={{fontSize:22, color: 'black'}}>
-              Location Reviews
-            </Text>
-            <FlatList
-          data = {this.state.userData.reviews}
-          renderItem={({item}) => (
-            <View>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id})} >
-           <Text>Review ID: {item.review.review_id}             </Text>
 
-           </TouchableOpacity>
-           <Text>Overall rating: {item.review.overall_rating} </Text>
-           <Text>Price rating: {item.review.price_rating} </Text>
-           <Text>Quality rating: {item.review.quality_rating} </Text>
-           <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
-           <Text>Review body: {item.review.review_body} </Text>
-           <Text>Likes rating: {item.review.likes} </Text>
-
-           <Text style={{fontSize:22, color: 'black'}} >
-           Reviews
-           </Text>
+   
 
 
 
 
 
-           
-            </View>
-          )}
-          keyExtractor ={(item) => item.review.review_id.toString()}          />
+
+
+            
+             
+        
           
          
 
@@ -196,5 +151,25 @@ class GetUserInfo extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+  },
+  text: {
+    textAlign:'center',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  space: {
+    height: 40,
+ 
+  },
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    backgroundColor: 'pink',
+  },
+  });
 
 export default GetUserInfo;

@@ -3,7 +3,7 @@ import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, Touchab
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 
-class usersReviews extends Component {
+class favLocations extends Component {
   constructor(props) {
     super(props);
 
@@ -88,52 +88,63 @@ class usersReviews extends Component {
       );
     } else {
       return (
-        <View style={{ flex:1, width: '100%'}}>
-           
+         <View style={{ flex:1, width: '100%'}}>
         
+         
+
+    
+            <Text style={{fontSize: 22, color: 'black'}}>
+             Favourite Locations 
+                </Text>
+                <FlatList
+          data = {this.state.userData.reviews}
+          renderItem={({item}) => (
+            <View>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {loc_id: item.location.location_id} , {rev_id : item.review.review_id})} >
+           <Text>Location ID: {item.location.location_id}             </Text>
+
+           </TouchableOpacity>
+           <Text>Location name: {item.location.location_name} </Text>
+           <Text>Location town: {item.location.location_town} </Text>
+           <Text>Latitude: {item.location.latitude} </Text>
+           <Text>Longitude: {item.location.longitude} </Text>
+           <Text>Photo Path: {item.location.photo_path} </Text>
+           <Text>Avg Overall Rating: {item.location.avg_overall_rating} </Text>
+           <Text>Avg PriceRating: {item.location.avg_price_rating} </Text>
+           <Text>Avg Quality Rating: {item.location.avg_quality_rating} </Text>
+           <Text>Avg Clenliness Rating: {item.location.avg_clenliness_rating} </Text>
+
+        
+
+
+
+
+
+
+
+            </View>
+          )}
+          keyExtractor ={(item, index) => item.location.location_id.toString()}  />            
              
             
-           
-
-           <Text style={{fontSize:22, color: 'black'}} >
-           Reviews
-           </Text>
-           <FlatList
+            <Text style={{fontSize:22, color: 'black'}}>
+              Location Reviews
+            </Text>
+            <FlatList
           data = {this.state.userData.reviews}
           renderItem={({item}) => (
             <View>
               <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
-                <Text>{"\n"}</Text>
-                
-                <Text>Location name : {item.location.location_name}</Text>
-                 </TouchableOpacity>
-                <Text>Location town: {item.location.location_town}</Text>
-           
+           <Text>Review ID: {item.review.review_id}             </Text>
 
-           <TouchableOpacity onPress={() => this.props.navigation.navigate("updateOverallrating", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
+           </TouchableOpacity>
            <Text>Overall rating: {item.review.overall_rating} </Text>
-           </TouchableOpacity>
-           
-           <TouchableOpacity onPress={() => this.props.navigation.navigate("updatePricerating", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
            <Text>Price rating: {item.review.price_rating} </Text>
-           </TouchableOpacity>
-
-           <TouchableOpacity onPress={() => this.props.navigation.navigate("updateQualityrating", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
            <Text>Quality rating: {item.review.quality_rating} </Text>
-           </TouchableOpacity>
-
-           <TouchableOpacity onPress={() => this.props.navigation.navigate("updateClenrating", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
            <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
-           </TouchableOpacity>
-
-           <TouchableOpacity onPress={() => this.props.navigation.navigate("updateRevbody", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
            <Text>Review body: {item.review.review_body} </Text>
-           </TouchableOpacity>
            <Text>Likes rating: {item.review.likes} </Text>
-           </View>
-            )}
-          keyExtractor ={(item) => item.review.review_id.toString()}          />
-           
+
 
 
 
@@ -141,7 +152,8 @@ class usersReviews extends Component {
 
            
             </View>
-         
+          )}
+          keyExtractor ={(item) => item.review.review_id.toString()}          />
           
          
 
@@ -152,11 +164,11 @@ class usersReviews extends Component {
 
 
           
-        
+        </View>
       );
     }
   }
 }
 
 
-export default usersReviews;
+export default favLocations;

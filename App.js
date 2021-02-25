@@ -25,6 +25,12 @@ import updatePassword from './components/updatePassword';
 import Search from './components/Search';
 import HandleReviews from './components/HandleReviews';
 import usersReviews from './components/usersReviews';
+import favLocations from './components/favLocations';
+import updateOverallrating from './components/updateOverallrating';
+import updatePricerating from './components/updatePricerating';
+import updateQualityrating from './components/updateQualityrating';
+import updateClenrating from './components/updateClenrating';
+import updateRevbody from './components/updateRevbody';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -57,6 +63,12 @@ class App extends Component {
           <Stack.Screen name="LocationReviews" component={LocationReviews} options={{ title: 'Locations and Reviews' }} />
           <Stack.Screen name="HandleReviews" component={HandleReviews} options={{ title: 'Locations and Reviews' }} />
           <Stack.Screen name="usersReviews" component={usersReviews} options={{ title: 'Locations and Reviews' }} />
+          <Stack.Screen name="favLocations" component={favLocations} options={{ title: 'Favourite locations' }} />
+          <Stack.Screen name="updateOverallrating" component={updateOverallrating} options={{ title: 'Update overall rating' }} />
+          <Stack.Screen name="updatePricerating" component={updatePricerating} options={{ title: 'Update price rating' }} />
+          <Stack.Screen name="updateQualityrating" component={updateQualityrating} options={{ title: 'Update quality rating' }} />
+          <Stack.Screen name="updateClenrating" component={updateClenrating} options={{ title: 'Update cleanliness rating' }} />
+          <Stack.Screen name="updateRevbody" component={updateRevbody} options={{ title: 'Update review body' }} />
 
 
 
