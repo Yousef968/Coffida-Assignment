@@ -74,10 +74,9 @@ class GetUserInfo extends Component {
   };
 
   render() {
-    const data = this.state.userData
-    const data1 = this.state.reviewData
-    const myMap = new Map(Object.entries(data));
-    console.log(myMap);
+ 
+    const myMap = new Map(Object.entries(this.state.userData));
+    
 
 
     if (this.state.isLoading) {
@@ -96,6 +95,10 @@ class GetUserInfo extends Component {
           </Text>
 
           <Text> User ID: {myMap.get('user_id')}</Text>
+
+
+
+
 
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('update first name')}>

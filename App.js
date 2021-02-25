@@ -31,6 +31,8 @@ import updatePricerating from './components/updatePricerating';
 import updateQualityrating from './components/updateQualityrating';
 import updateClenrating from './components/updateClenrating';
 import updateRevbody from './components/updateRevbody';
+import HandlePhotos from './components/HandlePhotos';
+import favLocationReviews from './components/favLocationReviews';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -69,6 +71,9 @@ class App extends Component {
           <Stack.Screen name="updateQualityrating" component={updateQualityrating} options={{ title: 'Update quality rating' }} />
           <Stack.Screen name="updateClenrating" component={updateClenrating} options={{ title: 'Update cleanliness rating' }} />
           <Stack.Screen name="updateRevbody" component={updateRevbody} options={{ title: 'Update review body' }} />
+          <Stack.Screen name="HandlePhotos" component={HandlePhotos} options={{title: 'Photo'}} />
+          <Stack.Screen name="favLocationReviews" component={favLocationReviews} options={{title: 'LOL'}} />
+
 
 
 

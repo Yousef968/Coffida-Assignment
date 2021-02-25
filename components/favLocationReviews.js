@@ -3,7 +3,7 @@ import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, Touchab
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 
-class favLocations extends Component {
+class favLocationReviews extends Component {
   constructor(props) {
     super(props);
 
@@ -72,12 +72,47 @@ class favLocations extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
+  likeReview = async () => {
+    //Validation Here
+    const value = await AsyncStorage.getItem('@session_token');
+    const loc_id = this.props.route.params.loc_id;
+    const rev_id = this.props.route.params.rev_id;
+
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id + '/like', {
+      method: 'post',
+      headers: {
+        'X-Authorization': value,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Review liked");
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else {
+          throw 'Something went wrong';
+        }
+      })
+      
+
+      .then(async () => {
+        this.setState({
+          isLoading: false,
+          
+        });
+        ToastAndroid.show('Review liked',ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
  
   
 
   render() {
 
-    const myMap = new Map(Object.entries(this.state.reviewData));
+    const myMap = new Map(Object.entries(this.state.userData));
     console.log(myMap);
 
 
@@ -90,56 +125,48 @@ class favLocations extends Component {
     } else {
       return (
          <View style={{ flex:1, width: '100%'}}>
-         
         
          
 
     
             <Text style={{fontSize: 22, color: 'black'}}>
-             Favourite Locations 
+             Reviews 
                 </Text>
                 <FlatList
           data = {this.state.userData.reviews}
           renderItem={({item}) => (
-            <View>
+              <View>
+            <View style={{height:5}} />
                 <Button
-           title="Get reviews for this location"
-           onPress={() => this.props.navigation.navigate("favLocationReviews", {loc_id: item.location.location_id , rev_id: item.review.review_id})} />
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {loc_id: item.location.location_id} , {rev_id : item.review.review_id})} >
-           <Text>Location ID: {item.location.location_id}             </Text>
+                title="Like this review"
+                onPress={() => this.likeReview()} />
+                <View style={{height:5}} />
+                <Button
+                title="Unlike this review"
+                onPress={() => this.unlikeReview} />
+    
+              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
+           <Text>Review ID: {item.review_id}             </Text>
+           
 
            </TouchableOpacity>
-           <Text>Location name: {item.location.location_name} </Text>
-           <Text>Location town: {item.location.location_town} </Text>
-           <Text>Latitude: {item.location.latitude} </Text>
-           <Text>Longitude: {item.location.longitude} </Text>
-           <Text>Photo Path: {item.location.photo_path} </Text>
-           <Text>Avg Overall Rating: {item.location.avg_overall_rating} </Text>
-           <Text>Avg PriceRating: {item.location.avg_price_rating} </Text>
-           <Text>Avg Quality Rating: {item.location.avg_quality_rating} </Text>
-           <Text>Avg Clenliness Rating: {item.location.avg_clenliness_rating} </Text>
-
-        
+           <Text>Overall rating: {item.review.overall_rating} </Text>
+           <Text>Price rating: {item.review.price_rating} </Text>
+           <Text>Quality rating: {item.review.quality_rating} </Text>
+           <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
+           <Text>Review body: {item.review.review_body} </Text>
+           <Text>Likes rating: {item.review.likes} </Text>
+           
 
 
 
 
 
-
-
+           
             </View>
           )}
-          keyExtractor ={(item, index) => item.review.review_id.toString()}  />            
-             
-            
-           
-
-
-
-
-
-           
-         
+          keyExtractor ={(item) => item.review.review_id.toString()}        
+            />
           
          
 
@@ -157,4 +184,4 @@ class favLocations extends Component {
 }
 
 
-export default favLocations;
+export default favLocationReviews;

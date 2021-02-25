@@ -72,6 +72,7 @@ class usersReviews extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
+  
 
   render() {
     const data = this.state.userData
@@ -95,15 +96,21 @@ class usersReviews extends Component {
             
            
 
-           <Text style={{fontSize:22, color: 'black'}} >
+           <Text style={{fontSize:22, color: 'black' }} >
            Reviews
            </Text>
            <FlatList
           data = {this.state.userData.reviews}
           renderItem={({item}) => (
             <View>
+            
+              <Button title="Add photo to this review" 
+              onPress={() => this.props.navigation.navigate("HandlePhotos" , {rev_id: item.review.review_id , loc_id: item.location.location_id})} 
+              />
+              
+        
               <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
-                <Text>{"\n"}</Text>
+                
                 
                 <Text>Location name : {item.location.location_name}</Text>
                  </TouchableOpacity>

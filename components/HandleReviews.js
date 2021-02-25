@@ -62,13 +62,13 @@ class HandleReviews extends Component {
       .then(async () => {
         ToastAndroid.show('Deleted your review', ToastAndroid.SHORT);
         this.props.navigation.navigate('Home');
-        this.props.navigation.navigate('Home');
       })
       .catch((error) => {
         console.log(error);
         ToastAndroid.show('error', ToastAndroid.SHORT);
       });
   };
+  
   
 
   render() {
@@ -85,7 +85,20 @@ class HandleReviews extends Component {
         <Button title="Delete this review"
         type="solid"
         onPress={() => this.deleteReview()}  />
-      </View>
+        
+        
+
+        
+        
+       
+
+        
+     
+
+        </View>
+
+        
+      
     );
   }
 }
