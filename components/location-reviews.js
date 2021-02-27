@@ -54,6 +54,8 @@ class LocationReviews extends Component {
         title="Find Locations"
         
         onPress={() => this.props.navigation.navigate("findlocation")} />
+
+    
   
           
         </View>

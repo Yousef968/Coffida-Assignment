@@ -18,7 +18,7 @@ class favLocationReviews extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      this.getInfo();
+      this.getThis();
     });
   }
   componentWillUnmount() {
@@ -107,13 +107,48 @@ class favLocationReviews extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
+  getThis = async () => {
+    //Validation Here
+    const value = await AsyncStorage.getItem('@session_token');
+    const loc_id = this.props.route.params.loc_id;
+
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id, {
+      headers: {
+        'X-Authorization': value,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else {
+          throw 'Something went wrong';
+        }
+      })
+
+      .then(async (responseJson) => {
+        this.setState({
+          isLoading: false,
+          userData: responseJson,
+        });
+        ToastAndroid.show(
+          'Details for this location revealed',
+          ToastAndroid.SHORT,
+        );
+        console.log(loc_id);
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
  
   
 
   render() {
+    console.log(this.state.userData);
 
-    const myMap = new Map(Object.entries(this.state.userData));
-    console.log(myMap);
 
 
     if (this.state.isLoading) {
@@ -133,7 +168,7 @@ class favLocationReviews extends Component {
              Reviews 
                 </Text>
                 <FlatList
-          data = {this.state.userData.reviews}
+          data = {this.state.userData.location_reviews}
           renderItem={({item}) => (
               <View>
             <View style={{height:5}} />
@@ -145,17 +180,16 @@ class favLocationReviews extends Component {
                 title="Unlike this review"
                 onPress={() => this.unlikeReview} />
     
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
+             
            <Text>Review ID: {item.review_id}             </Text>
            
 
-           </TouchableOpacity>
-           <Text>Overall rating: {item.review.overall_rating} </Text>
-           <Text>Price rating: {item.review.price_rating} </Text>
-           <Text>Quality rating: {item.review.quality_rating} </Text>
-           <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
-           <Text>Review body: {item.review.review_body} </Text>
-           <Text>Likes rating: {item.review.likes} </Text>
+           <Text>Overall rating: {item.overall_rating} </Text>
+           <Text>Price rating: {item.price_rating} </Text>
+           <Text>Quality rating: {item.quality_rating} </Text>
+           <Text>Clenliness rating: {item.clenliness_rating} </Text>
+           <Text>Review body: {item.review_body} </Text>
+           <Text>Likes rating: {item.likes} </Text>
            
 
 
@@ -165,7 +199,7 @@ class favLocationReviews extends Component {
            
             </View>
           )}
-          keyExtractor ={(item) => item.review.review_id.toString()}        
+          keyExtractor ={(item) => item.review_id.toString()}        
             />
           
          

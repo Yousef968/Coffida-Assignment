@@ -127,7 +127,7 @@ class getSingleLocation extends Component {
   };
   
 
-
+  
 
 
 
@@ -175,6 +175,9 @@ class getSingleLocation extends Component {
     const navigation = this.props.navigation;
     const data = this.state.userData;
     const myMap = new Map(Object.entries(data));
+    let loc_id = myMap.get('location_id');
+    console.log(loc_id);
+  
     console.log(this.state.userData);
 
     if (this.state.isLoading) {
@@ -185,7 +188,7 @@ class getSingleLocation extends Component {
       );
     } else {
       return (
-<View>
+<View style = {{flex:1}} >
 
 
            <Button title="Add review for this location"
@@ -206,13 +209,22 @@ class getSingleLocation extends Component {
           title="Unfavourite this location"
           onPress={() => this.unfavLoc()}
           />
+       
 
           <Text style={{fontSize: 22, color: 'black'}}>
             Location
           </Text>
 
+
+
+
+
+        
+
+
+
+
             <Text>
-            {'\n'}Location_ID: {myMap.get('location_id')}
             {'\n'}
             Location_Name: {myMap.get('location_name')}
             {'\n'}
@@ -238,22 +250,33 @@ class getSingleLocation extends Component {
             </Text>
             
             <FlatList
-          data = {this.state.userData.reviews}
+          data = {this.state.userData.location_reviews}
           renderItem={({item}) => (
             <View>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id})} >
-           <Text>Review ID: {item.review.review_id}             </Text>
 
+                
+
+             <Text>{"\n"}</Text>
+             <TouchableOpacity  onPress={() => this.props.navigation.navigate("likeRevs", {rev_id: item.review_id , loc_id: loc_id})} >
+             
+            
+             
+                <Text>Overall rating: {item.overall_rating}</Text>
+                <Text>Price rating: {item.price_rating}</Text>
+                <Text>Quality rating: {item.quality_rating}</Text>
+                <Text>Cleanliness rating: {item.clenliness_rating}</Text>
+           <Text>Review body: {item.review_body}             </Text>
+
+          
+           <Text>Likes: {item.likes} </Text>
            </TouchableOpacity>
-           <Text>Overall rating: {item.review.overall_rating} </Text>
-           <Text>Price rating: {item.review.price_rating} </Text>
-           <Text>Quality rating: {item.review.quality_rating} </Text>
-           <Text>Clenliness rating: {item.review.clenliness_rating} </Text>
-           <Text>Review body: {item.review.review_body} </Text>
-           <Text>Likes rating: {item.review.likes} </Text>
+       
+           
            </View>
             )}
-          keyExtractor ={(item) => item.review.review_id.toString()}          />
+          keyExtractor ={(item) => item.review_id.toString()}      
+          
+              />
         
           
 

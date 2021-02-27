@@ -99,25 +99,25 @@ class favLocations extends Component {
              Favourite Locations 
                 </Text>
                 <FlatList
-          data = {this.state.userData.reviews}
+          data = {this.state.userData.favourite_locations}
           renderItem={({item}) => (
             <View>
                 <Button
            title="Get reviews for this location"
-           onPress={() => this.props.navigation.navigate("favLocationReviews", {loc_id: item.location.location_id , rev_id: item.review.review_id})} />
+           onPress={() => this.props.navigation.navigate("favLocationReviews", {loc_id: item.location_id , rev_id: item.review_id})} />
               <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {loc_id: item.location.location_id} , {rev_id : item.review.review_id})} >
-           <Text>Location ID: {item.location.location_id}             </Text>
+           <Text>Location ID: {item.location_id}             </Text>
 
            </TouchableOpacity>
-           <Text>Location name: {item.location.location_name} </Text>
-           <Text>Location town: {item.location.location_town} </Text>
-           <Text>Latitude: {item.location.latitude} </Text>
-           <Text>Longitude: {item.location.longitude} </Text>
-           <Text>Photo Path: {item.location.photo_path} </Text>
-           <Text>Avg Overall Rating: {item.location.avg_overall_rating} </Text>
-           <Text>Avg PriceRating: {item.location.avg_price_rating} </Text>
-           <Text>Avg Quality Rating: {item.location.avg_quality_rating} </Text>
-           <Text>Avg Clenliness Rating: {item.location.avg_clenliness_rating} </Text>
+           <Text>Location name: {item.location_name} </Text>
+           <Text>Location town: {item.location_town} </Text>
+           <Text>Latitude: {item.latitude} </Text>
+           <Text>Longitude: {item.longitude} </Text>
+           <Text>Photo Path: {item.photo_path} </Text>
+           <Text>Avg Overall Rating: {item.avg_overall_rating} </Text>
+           <Text>Avg PriceRating: {item.avg_price_rating} </Text>
+           <Text>Avg Quality Rating: {item.avg_quality_rating} </Text>
+           <Text>Avg Clenliness Rating: {item.avg_clenliness_rating} </Text>
 
         
 
@@ -129,7 +129,7 @@ class favLocations extends Component {
 
             </View>
           )}
-          keyExtractor ={(item, index) => item.review.review_id.toString()}  />            
+          keyExtractor ={(item, index) => item.location_id.toString()}  />            
              
             
            

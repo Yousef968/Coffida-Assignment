@@ -1,19 +1,16 @@
 import React, {Component} from 'react';
-import {Text, View,ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity, StyleSheet} from 'react-native';
+import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 
-class findLocation extends Component {
+class likedreviews extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      listData: [],
+
+      userData: [],
     };
   }
 
@@ -34,26 +31,26 @@ class findLocation extends Component {
       Alert.alert('You need to be logged in to view this page');
       //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
-    } else{
+    } else {
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
-  }
-
+  };
 
   getInfo = async () => {
     //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
-    
-    return fetch('http://10.0.2.2:3333/api/1.0.0/find' , {
+    const id = await AsyncStorage.getItem('@user_id');
+    console.log(id);
+    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
       headers: {
-        'X-Authorization': value, 
+        'X-Authorization': value,
       },
     })
       .then((response) => {
         if (response.status === 200) {
-          return response.json()
+          return response.json();
         } else if (response.status === 401) {
           throw 'Unauthorised';
         } else {
@@ -64,9 +61,44 @@ class findLocation extends Component {
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          listData: responseJson
+          userData: responseJson,
+          reviewData: responseJson,       
         });
-        ToastAndroid.show('Locations revealed', ToastAndroid.SHORT);
+        console.log(this.state.userData);
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
+  unlikeReview = async () => {
+    //Validation Here
+    const value = await AsyncStorage.getItem('@session_token');
+    const loc_id = this.props.route.params.loc_id;
+const rev_id = this.props.route.params.rev_id;
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id + '/like', {
+      method: 'delete',
+      headers: {
+        'X-Authorization': value,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Review unliked");
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else {
+          throw 'Something went wrong';
+        }
+      })
+      
+
+      .then(async () => {
+        this.setState({
+          isLoading: false,
+          
+        });
+        ToastAndroid.show('Review unliked',ToastAndroid.SHORT);
       })
       .catch((error) => {
         console.log(error);
@@ -74,40 +106,12 @@ class findLocation extends Component {
       });
   };
   
-  getLocInfo = async () => {
-    //Validation Here
-    const value = await AsyncStorage.getItem('@session_token');
-    
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location'  , {
-      headers: {
-        'X-Authorization': value, 
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json()
-        } else if (response.status === 401) {
-          throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
-        }
-      })
-
-      .then(async (responseJson) => {
-        this.setState({
-          isLoading: false,
-          listData: responseJson
-        });
-        ToastAndroid.show('Info out', ToastAndroid.SHORT);
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show('Error!', ToastAndroid.SHORT);
-      });
-  };
 
   render() {
-    const navigation = this.props.navigation;
+    const data = this.state.userData
+    const data1 = this.state.reviewData
+    const myMap = new Map(Object.entries(data));
+    console.log(myMap);
 
 
     if (this.state.isLoading) {
@@ -118,53 +122,65 @@ class findLocation extends Component {
       );
     } else {
       return (
-        
-        <View>
-        
-          
+        <View style={{ flex:1, width: '100%'}}>
            
-
-           <FlatList
-          data = {this.state.listData}
-          renderItem={({item}) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {loc_id: item.location_id , rev_id: item.review_id})} >
-            <View>
-               <Text></Text>
-              
-            <Text style={{fontSize: 18, color: 'black'}}>Location id = {parseInt(item.location_id)}</Text>    
-               
+        
              
-        
-             <Text style={{fontSize:18, color: 'black'}}>Location name = {item.location_name}</Text>
-        
-
-
-
-
             
-
-            </View>
-
-            </TouchableOpacity>
-          )}
-          keyExtractor ={(item, index) => item.location_id.toString()}
-          />
-          <Button title="Filter search" onPress={() => this.props.navigation.navigate("Search")} />
            
 
+           <Text style={{fontSize:22, color: 'black' , textAlign: 'center'}} >
+           Liked reviews
+           </Text>
+           <FlatList
+          data = {this.state.userData.liked_reviews}
+          renderItem={({item}) => (
+            <View>
+                <Text></Text>
+                <Text>Location name: {item.location.location_name}</Text>
+                <Text>Location town: {item.location.location_town}</Text>
+                <Text>Review ID: {item.review.review_id}</Text>
+                <Text>Overall rating: {item.review.overall_rating}</Text>
+                <Text>Price rating: {item.review.price_rating}</Text>
+                <Text>Quality rating: {item.review.quality_rating}</Text>
+                <Text>Cleanliness rating: {item.review.clenliness_rating}</Text>
+                <Text>Review body: {item.review.review_body}</Text>
+                <Text>Likes: {item.review.likes}</Text>
+
+
+
+          
+            
+              
+        
+             
+           </View>
+            )}
+          keyExtractor ={(item) => item.review.review_id.toString()}          />
+           
+
+
+
+
+
+           
+            </View>
+         
+          
          
 
-        </View>
+
+
+ 
+
+
+
+          
+        
       );
     }
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-    backgroundColor: 'pink',
-  },
-});
 
-export default findLocation;
+export default likedreviews;

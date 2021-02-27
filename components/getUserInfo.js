@@ -125,6 +125,10 @@ class GetUserInfo extends Component {
                     <Button
             title="Get your reviews"
             onPress={() => this.props.navigation.navigate('usersReviews')} /> 
+            <View style={styles.space} />
+            <Button
+            title="Get your liked reviews"
+            onPress={() => this.props.navigation.navigate("likedreviews")} />
             
 
    
