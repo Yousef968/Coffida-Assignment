@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {ToastAndroid, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 class Login extends Component {
   constructor(props) {
@@ -11,10 +11,18 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      email_error:'',
+      password_error:'',
     };
   }
   login = async () => {
-    //Validation Here
+    if(this.state.email.length==''){
+      this.setState({email_error: "email can't be blank"})
+    }
+    if(this.state.password.length==''){
+      this.setState({password_error: "password can't be blank"})
+    }
+    else {
     return fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
       method: 'post',
       headers: {
@@ -35,8 +43,6 @@ class Login extends Component {
       .then(async (responseJson) => {
         console.log('Signed in!', responseJson);
         await AsyncStorage.setItem('@session_token', responseJson.token);
-       // const id_string = JSON.stringify(responseJson.id)
-      //  await AsyncStorage.setItem('@user_id', id_string)
         await AsyncStorage.setItem('@user_id', JSON.stringify(responseJson.id))
        
         this.props.navigation.navigate("Home");
@@ -47,8 +53,8 @@ class Login extends Component {
         ToastAndroid.show('error', ToastAndroid.SHORT);
       });
   };
+}
   render() {
-    const navigation = this.props.navigation;
 
     return (
       <View>
@@ -56,16 +62,27 @@ class Login extends Component {
           placeholder="Enter your email"
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
+                <Text style={{color:'red'}} > {this.state.email_error}</Text>
+
+        <View style={{height:10}} />
         <TextInput
           placeholder="Enter your password"
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          style={{padding: 5, borderWidth: 2, margin: 5}}
           secureTextEntry={true}
         />
-        <Button title="Login" onPress={() => this.login()} />
+                        <Text style={{color:'red'}} > {this.state.password_error}</Text>
+
+        <View style={{height:25}} />
+
+        <Button
+        block style={{backgroundColor: 'red' , width:'100%'}} 
+        onPress={() => this.login()} >
+          <Text>Login</Text>
+        </Button>
       </View>
     );
   }

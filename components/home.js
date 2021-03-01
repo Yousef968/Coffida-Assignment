@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {View, StyleSheet,  Text} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import {View, StyleSheet } from 'react-native';
+import { Container,  Button, Text } from 'native-base';
 
 
 
@@ -14,22 +13,27 @@ class HomeScreen extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>
-           Coffida App</Text>
+      <Container style={styles.container}>
+      
+        <Text style={styles.text} >
+           Main Menu</Text>
+
+           <View style={styles.space} />
+        <Button block style={{backgroundColor: 'red' , width:'100%'}}
+        onPress= {() => navigation.navigate("Account Management")} >
+<Text>Account</Text>
+</Button>
+
+
 <View style={styles.space} />
-        <Button 
-          title="Account Mangement"
-          type="solid"
           
-          onPress={() => navigation.navigate('Account Management')}
-        />
-        <View style={styles.space} />
+         
      
-        <Button title="Locations and Reviews"
-        type="solid"
-        onPress={() => navigation.navigate('LocationReviews')} />
-      </View>
+        <Button block style={{backgroundColor: 'blue', width:'100%'}}
+        onPress={() => navigation.navigate('LocationReviews')} >
+        <Text>Location and Reviews</Text>
+        </Button>
+</Container>
     );
   }
 }
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
     height:40,
   },
   text: {
-    color: 'white',
+    color: 'black',
     fontSize: 30,
     textAlign: 'center',
   //  justifyContent: 'flex-start',

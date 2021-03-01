@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
+
 
 class updatePassword extends Component {
   constructor(props) {
@@ -9,8 +10,8 @@ class updatePassword extends Component {
 
     this.state = {
       isLoading: true,
-
       password: '',
+      password_length_check:'',
      
       
     };
@@ -39,7 +40,10 @@ class updatePassword extends Component {
 };
 
   updateUser = async () => {
-    let to_send = {};
+    if(this.state.password.length <5){
+      this.setState({password_length_check: "Password has to be greater than 5 characters"})
+    }
+    else{
 
     const value = await AsyncStorage.getItem('@session_token');
     const id = await AsyncStorage.getItem('@user_id');
@@ -82,6 +86,7 @@ class updatePassword extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -94,16 +99,22 @@ class updatePassword extends Component {
     } else {
       return (
         <View>
-          <Text>Update user credentials</Text>
+          <Text style={{textAlign:'center'}} > Update password</Text>
 
           <TextInput
             placeholder="Enter password ..."
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+                          <Text style={{color:'red'}} > {this.state.password_length_check}</Text>
+
          
-          <Button title="Update" onPress={() => this.updateUser()} />
+          <Button
+          onPress={() => this.updateUser()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

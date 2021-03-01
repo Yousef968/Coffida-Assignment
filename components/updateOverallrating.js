@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 
 class updateOverallrating extends Component {
@@ -12,6 +12,7 @@ class updateOverallrating extends Component {
       isLoading: true,
 
       overall_rating: '',
+      overall_rating_check:'',
      
       
     };
@@ -39,6 +40,10 @@ class updateOverallrating extends Component {
 };
 
   updateRating = async () => {
+    if(this.state.overall_rating==''){
+      this.setState({overall_rating_check: "overall rating can't be left empty"})
+    }
+    else{
 
     let updateReview = {};
 
@@ -93,6 +98,7 @@ class updateOverallrating extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -105,16 +111,23 @@ class updateOverallrating extends Component {
     } else {
       return (
         <View>
-          <Text>Update Overall rating</Text>
+          <Text style={{textAlign: 'center'}} >Update overall rating</Text>
 
           <TextInput
             placeholder="Enter overall rating..."
             onChangeText={(overall_rating) => this.setState({overall_rating})}
             value={this.state.overall_rating}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            keyboardType="numeric"
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+                          <Text style={{color:'red'}} > {this.state.overall_rating_check}</Text>
+
          
-          <Button title="Update" onPress={() => this.updateRating()} />
+          <Button
+          onPress={() => this.updateRating()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

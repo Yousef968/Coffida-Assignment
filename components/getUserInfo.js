@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { Text, View,ToastAndroid, Alert,  ActivityIndicator, StyleSheet, TouchableOpacity,FlatList} from 'react-native';
+import {  View,ToastAndroid, Alert,  ActivityIndicator, StyleSheet, TouchableOpacity,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 class GetUserInfo extends Component {
   constructor(props) {
@@ -89,7 +89,7 @@ class GetUserInfo extends Component {
       return (
          <View style={styles.container}>
         
-          <Text style={{fontSize: 20, color: 'red'}}>
+          <Text style={{fontSize: 19.5, color: 'red'}}>
             Click on the user details you wish to update!
             {'\n'}
           </Text>
@@ -114,21 +114,29 @@ class GetUserInfo extends Component {
           </TouchableOpacity>
           <View style={styles.space} />
           <Button
-            title="Update Password"
-            onPress={() => this.props.navigation.navigate('update password')} />
+            block style={{backgroundColor: 'red' , width:'100%'}}
+            onPress={() => this.props.navigation.navigate('update password')} >
+              <Text>Update Password</Text>
+            </Button>
             <View style={styles.space} />
             <Button 
-            title = "Get your fav locations"
-            onPress={() => this.props.navigation.navigate('favLocations')} />
+            block style={{backgroundColor: 'red' , width:'100%'}}
+            onPress={() => this.props.navigation.navigate('favLocations')} >
+              <Text>Get your fav locations</Text>
+            </Button>
             <View style={styles.space} />
                     
                     <Button
-            title="Get your reviews"
-            onPress={() => this.props.navigation.navigate('usersReviews')} /> 
+            block style={{backgroundColor: 'red' , width:'100%'}}
+            onPress={() => this.props.navigation.navigate('usersReviews')} >
+              <Text>Get your reviews</Text>
+            </Button>
             <View style={styles.space} />
             <Button
-            title="Get your liked reviews"
-            onPress={() => this.props.navigation.navigate("likedreviews")} />
+            block style={{backgroundColor: 'red' , width:'100%'}}
+            onPress={() => this.props.navigation.navigate("likedreviews")} >
+              <Text>Get your liked reviews</Text>
+            </Button>
             
 
    

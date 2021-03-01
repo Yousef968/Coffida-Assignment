@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
+import { View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
+
 
 class favLocations extends Component {
   constructor(props) {
@@ -103,8 +104,10 @@ class favLocations extends Component {
           renderItem={({item}) => (
             <View>
                 <Button
-           title="Get reviews for this location"
-           onPress={() => this.props.navigation.navigate("favLocationReviews", {loc_id: item.location_id , rev_id: item.review_id})} />
+           block style={{backgroundColor: 'red' , width:'100%'}} 
+           onPress={() => this.props.navigation.navigate("favLocationReviews", {loc_id: item.location_id , rev_id: item.review_id})} >
+             <Text>Get reviews for this location</Text>
+           </Button>
               <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {loc_id: item.location.location_id} , {rev_id : item.review.review_id})} >
            <Text>Location ID: {item.location_id}             </Text>
 

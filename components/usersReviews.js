@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
+import { Text, View,ToastAndroid, Alert,  ActivityIndicator,FlatList, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 
 class usersReviews extends Component {
   constructor(props) {
@@ -104,7 +106,14 @@ class usersReviews extends Component {
           renderItem={({item}) => (
             <View>
             
-              <Button title="Add photo to this review" 
+              <Button
+              icon={
+                <FontAwesome5
+                name= "camera"
+                size={20}
+                color="white"
+              /> 
+            } title="  (Add photo to this review)" 
               onPress={() => this.props.navigation.navigate("HandlePhotos" , {rev_id: item.review.review_id , loc_id: item.location.location_id})} 
               />
               

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button, Text} from 'native-base';
 
 
 class updateRevbody extends Component {
@@ -12,6 +12,7 @@ class updateRevbody extends Component {
       isLoading: true,
 
       review_body: '',
+      review_body_check:'',
      
       
     };
@@ -39,6 +40,10 @@ class updateRevbody extends Component {
 };
 
   updateRating = async () => {
+    if(this.state.review_body==''){
+      this.setState({review_body_check: "review body can't be left blank"})
+    }
+    else{
 
     
 
@@ -92,6 +97,7 @@ class updateRevbody extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -104,16 +110,21 @@ class updateRevbody extends Component {
     } else {
       return (
         <View>
-          <Text>Update review body</Text>
+          <Text style={{textAlign:'center'}}>Update review body</Text>
 
           <TextInput
             placeholder="Enter review body..."
             onChangeText={(review_body) => this.setState({review_body})}
             value={this.state.review_body}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 20, borderWidth: 2, margin: 7}}
           />
-         
-          <Button title="Update" onPress={() => this.updateRating()} />
+                         <Text style={{color:'red'}} > {this.state.review_body_check}</Text>
+
+          <Button
+          onPress={() => this.updateRating()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
+
 
 class updateLname extends Component {
   constructor(props) {
@@ -9,8 +10,8 @@ class updateLname extends Component {
 
     this.state = {
       isLoading: true,
-
       last_name: '',
+      last_name_error:'',
      
       
     };
@@ -39,7 +40,10 @@ class updateLname extends Component {
 };
 
   updateUser = async () => {
-    let to_send = {};
+    if (this.state.last_name==''){
+      this.setState({last_name_error: "last name can't be empty"})
+    }
+    else {
 
     const value = await AsyncStorage.getItem('@session_token');
     const id = await AsyncStorage.getItem('@user_id');
@@ -82,6 +86,7 @@ class updateLname extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -94,16 +99,22 @@ class updateLname extends Component {
     } else {
       return (
         <View>
-          <Text>Update user credentials</Text>
+          <Text style={{textAlign:'center'}} > Update last name</Text>
 
           <TextInput
             placeholder="Enter last name"
             onChangeText={(last_name) => this.setState({last_name})}
             value={this.state.last_name}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+                          <Text style={{color:'red'}} > {this.state.last_name_error}</Text>
+
          
-          <Button title="Update" onPress={() => this.updateUser()} />
+          <Button
+          block style={{backgroundColor: 'red' , width:'100%'}}
+          onPress={() => this.updateUser()} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

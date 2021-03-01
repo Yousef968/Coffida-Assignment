@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View,  Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
+
+
 
 
 class updateFname extends Component {
@@ -10,7 +12,7 @@ class updateFname extends Component {
 
     this.state = {
       isLoading: true,
-
+      first_name_error:'',
       first_name: '',
      
       
@@ -40,6 +42,11 @@ class updateFname extends Component {
 };
 
   updateUser = async () => {
+    if(this.state.first_name=='')
+    {
+      this.setState({first_name_error: "Name can't be empty"})
+    }
+    else {
 
     const value = await AsyncStorage.getItem('@session_token');
     const id = await AsyncStorage.getItem('@user_id');
@@ -82,6 +89,9 @@ class updateFname extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
+   
+  
 
   render() {
     const navigation = this.props.navigation;
@@ -94,16 +104,22 @@ class updateFname extends Component {
     } else {
       return (
         <View>
-          <Text>Update user credentials</Text>
+
+          <Text style={{textAlign:'center'}}> Update first name</Text>
 
           <TextInput
             placeholder="Enter first name"
             onChangeText={(first_name) => this.setState({first_name})}
             value={this.state.first_name}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+          <Text style={{color:'red'}} > {this.state.first_name_error}</Text>
          
-          <Button title="Update" onPress={() => this.updateUser()} />
+          <Button
+          onPress={() => this.updateUser()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

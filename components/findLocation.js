@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View,ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity, StyleSheet} from 'react-native';
+import { View,ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Container,  Button, Text } from 'native-base';
 
 class findLocation extends Component {
   constructor(props) {
@@ -119,7 +119,7 @@ class findLocation extends Component {
     } else {
       return (
         
-        <View>
+        <Container>
         
           
            
@@ -130,12 +130,11 @@ class findLocation extends Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {loc_id: item.location_id , rev_id: item.review_id})} >
             <View>
                <Text></Text>
-              
-            <Text style={{fontSize: 18, color: 'black'}}>Location id = {parseInt(item.location_id)}</Text>    
-               
              
         
-             <Text style={{fontSize:18, color: 'black'}}>Location name = {item.location_name}</Text>
+             <Text style={{fontSize:18, color: 'black'}}>Location name : {item.location_name}</Text>
+             <Text style={{fontSize:18, color: 'black'}}>Location town : {item.location_town}</Text>
+
         
 
 
@@ -149,12 +148,17 @@ class findLocation extends Component {
           )}
           keyExtractor ={(item, index) => item.location_id.toString()}
           />
-          <Button title="Filter search" onPress={() => this.props.navigation.navigate("Search")} />
+          
+          <Button
+          block style={{backgroundColor: 'red' , height:100}}
+          onPress={() => this.props.navigation.navigate("Search")} >
+            <Text>Filter search</Text>
+          </Button>
            
 
          
 
-        </View>
+        </Container>
       );
     }
   }

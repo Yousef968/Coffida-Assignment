@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 
 class updatePricerating extends Component {
@@ -12,7 +12,7 @@ class updatePricerating extends Component {
       isLoading: true,
 
       price_rating: '',
-     
+     price_rating_check:'',
       
     };
   }
@@ -39,6 +39,10 @@ class updatePricerating extends Component {
 };
 
   updateRating = async () => {
+    if(this.state.price_rating==''){
+      this.setState({price_rating_check: "price rating can't be left empty"})
+    }
+    else{
 
     let updateReview = {};
 
@@ -94,6 +98,7 @@ class updatePricerating extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -106,16 +111,23 @@ class updatePricerating extends Component {
     } else {
       return (
         <View>
-          <Text>Update price rating</Text>
+          <Text style={{textAlign:'center'}} >Update price rating</Text>
 
           <TextInput
             placeholder="Enter price rating..."
             onChangeText={(price_rating) => this.setState({price_rating})}
             value={this.state.price_rating}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            keyboardType="numeric"
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+                          <Text style={{color:'red'}} > {this.state.price_rating_check}</Text>
+
          
-          <Button title="Update" onPress={() => this.updateRating()} />
+          <Button
+          onPress={() => this.updateRating()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

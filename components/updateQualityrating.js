@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View,  Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 
 class updateQualityrating extends Component {
@@ -12,7 +12,7 @@ class updateQualityrating extends Component {
       isLoading: true,
 
       quality_rating: '',
-     
+     quality_rating_check:'',
       
     };
   }
@@ -39,6 +39,10 @@ class updateQualityrating extends Component {
 };
 
   updateRating = async () => {
+    if(this.state.quality_rating==''){
+      this.setState({quality_rating_check: "quality rating can't be left empty"})
+    }
+    else{
 
     let updateReview = {};
 
@@ -93,6 +97,7 @@ class updateQualityrating extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
+}
 
   render() {
     const navigation = this.props.navigation;
@@ -105,16 +110,22 @@ class updateQualityrating extends Component {
     } else {
       return (
         <View>
-          <Text>Update Overall rating</Text>
+          <Text style={{textAlign:'center'}} >Update quality rating</Text>
 
           <TextInput
             placeholder="Enter quality rating..."
             onChangeText={(quality_rating) => this.setState({quality_rating})}
             value={this.state.quality_rating}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            keyboardType="numeric"
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-         
-          <Button title="Update" onPress={() => this.updateRating()} />
+                         <Text style={{color:'red'}} > {this.state.quality_rating_check}</Text>
+
+          <Button
+          onPress={() => this.updateRating()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

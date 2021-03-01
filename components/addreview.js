@@ -1,8 +1,10 @@
 import {Item} from 'native-base';
 import React, {Component} from 'react';
-import {Button, ToastAndroid} from 'react-native';
+import {Button, ToastAndroid,Text, Alert} from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Filter from 'bad-words';
+
 
 class AddReview extends Component {
   constructor(props) {
@@ -15,8 +17,11 @@ class AddReview extends Component {
       quality_rating: '',
       clenliness_rating: '',
       review_body: '',
+      review_body_check:'',
     };
   }
+ 
+
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
@@ -34,7 +39,6 @@ class AddReview extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -43,6 +47,15 @@ class AddReview extends Component {
     }
   };
   addreview = async () => {
+    const filter = new Filter();
+    filter.addWords('tea','Tea','cakes','Cakes');
+    if(this.state.review_body.includes(filter)){
+      Alert.alert("Error");
+    }
+    if(this.state.review_body==''){
+      this.setState({review_body_check: "Review body can't be empty"})
+    }
+    else{
     let to_send = {};
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
@@ -67,7 +80,6 @@ class AddReview extends Component {
       })
       .then((response) => {
         if (response.status === 201) {
-        //  return response.json();
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {
@@ -84,7 +96,7 @@ class AddReview extends Component {
         ToastAndroid.show('error', ToastAndroid.SHORT);
       });
   };
-
+  }
   render() {
     return (
       <ScrollView>
@@ -92,34 +104,38 @@ class AddReview extends Component {
           placeholder="Enter overall rating"
           onChangeText={(overall_rating) => this.setState({overall_rating})}
           value={this.state.overall_rating}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          keyboardType="numeric"
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
         <TextInput
           placeholder="Enter price rating"
           onChangeText={(price_rating) => this.setState({price_rating})}
           value={this.state.price_rating}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          keyboardType="numeric"
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
         <TextInput
           placeholder="Enter quality rating"
           onChangeText={(quality_rating) => this.setState({quality_rating})}
           value={this.state.quality_rating}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          keyboardType="numeric"
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
         <TextInput
           placeholder="Enter cleanliness rating"
-          onChangeText={(clenliness_rating) =>
-            this.setState({clenliness_rating})
-          }
+          onChangeText={(clenliness_rating) =>this.setState({clenliness_rating})}
           value={this.state.cleanliness_rating}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          keyboardType="numeric"
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
         <TextInput
           placeholder="Enter review body"
           onChangeText={(review_body) => this.setState({review_body})}
           value={this.state.review_body}
-          style={{padding: 5, borderWidth: 1, margin: 5}}
+          style={{padding: 5, borderWidth: 2, margin: 5}}
         />
+                        <Text style={{color:'red'}} > {this.state.review_body_check}</Text>
+
         <Button title="Add review" onPress={() => this.addreview()} />
       </ScrollView>
     );

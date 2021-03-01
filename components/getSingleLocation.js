@@ -9,7 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Button} from 'react-native-elements';
+
 
 
 class getSingleLocation extends Component {
@@ -200,13 +203,28 @@ class getSingleLocation extends Component {
           />
           <View style={{marginBottom:10}}></View>
           <Button
-          title="Favourite this location"
+           icon={
+            <Icon
+            name= "heart"
+            size={20}
+            color="white"
+          /> 
+        }
+          title=" (Favourite this location)"
           onPress={() => this.favLoc()}
 
           />
           <View style={{marginBottom:10}}></View>
             <Button
-          title="Unfavourite this location"
+            icon={
+            <FontAwesome5
+            name="heart-broken"
+            size={20}
+            color="white"
+            
+            />
+            }
+          title="   (Unfavourite this location)"
           onPress={() => this.unfavLoc()}
           />
        

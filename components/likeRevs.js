@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 class likeRevs extends Component {
   constructor(props) {
@@ -130,16 +132,30 @@ const rev_id = this.props.route.params.rev_id;
 
 
             <Button
-            title="Like review"
+            icon={
+              <Icon
+                name="thumbs-o-up"
+                size={20}
+                color="white"
+              /> 
+            }
+            title="  (Like review)"
             onPress={() => this.likeReview()} />
          
             <View style={{height:200}} />
                 
                 <Button
-                title="Unlike review"
+                icon={
+                <Icon
+                name="thumbs-o-down"
+                size={20}
+                color="white"
+              /> 
+            }
+                title="  (Unlike review)"
                 onPress={() => this.unlikeReview()} />
                 
-             
+
         
              
             

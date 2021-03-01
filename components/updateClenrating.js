@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Button , Text} from 'native-base';
 
 
 class updateClenrating extends Component {
@@ -12,6 +12,7 @@ class updateClenrating extends Component {
       isLoading: true,
 
       clenliness_rating: '',
+      clen_rating_check:'',
      
       
     };
@@ -39,6 +40,10 @@ class updateClenrating extends Component {
 };
 
   updateRating = async () => {
+    if(this.state.clenliness_rating==''){
+      this.setState({clen_rating_check: "cleanliness rating can't be left empty"})
+    }
+    else{
 
     let updateReview = {};
 
@@ -94,7 +99,7 @@ class updateClenrating extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
-
+  }
   render() {
     const navigation = this.props.navigation;
     if (this.state.isLoading) {
@@ -106,16 +111,23 @@ class updateClenrating extends Component {
     } else {
       return (
         <View>
-          <Text>Update cleanliness rating</Text>
+          <Text style={{textAlign:'center'}} >Update cleanliness rating</Text>
 
           <TextInput
             placeholder="Enter cleanliness rating..."
             onChangeText={(clenliness_rating) => this.setState({clenliness_rating})}
             value={this.state.clenliness_rating}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            keyboardType="numeric"
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
+                          <Text style={{color:'red'}} > {this.state.clen_rating_check}</Text>
+
          
-          <Button title="Update" onPress={() => this.updateRating()} />
+          <Button
+          onPress={() => this.updateRating()} 
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+            <Text>Update</Text>
+          </Button>
         </View>
       );
     }

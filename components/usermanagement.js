@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View,ToastAndroid, Text, StyleSheet} from 'react-native';
+import {View,ToastAndroid,  StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import { Container,  Button, Text } from 'native-base';
 
 
 class UserManagement extends Component {
@@ -50,31 +50,44 @@ class UserManagement extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View style={styles.container} >
+      <Container style={styles.container} >
         <Text style={styles.text}>
           User Management
         </Text>
+
         <View style={styles.space} />
         <Button
-          title="Sign Up"
           onPress={() => navigation.navigate('Sign Up')}
+          block style={{backgroundColor: 'red' , width:'100%'}} >
+          <Text>Sign up</Text>
+
+          </Button>
           
-        />
+        
               <View style={styles.space} />
 
         
-        <Button title="Login" onPress={() => navigation.navigate('Login')} />
+        <Button block style={{backgroundColor: 'red' , width:'100%'}}
+         onPress={() => navigation.navigate('Login')} >
+           <Text>Login</Text>
+         </Button>
         <View style={styles.space} />
 
         <Button
-          title="Get user information"
-          onPress={() => navigation.navigate('GetUserInfo')}
-        />
+          block style={{backgroundColor: 'red' , width:'100%'}}
+          onPress={() => navigation.navigate('GetUserInfo')} >
+            <Text>Get user information</Text>
+          </Button>
+        
                 <View style={styles.space} />
 
-        <Button title="Logout" onPress={() => this.logout()} /> 
+        <Button 
+        block style={{backgroundColor: 'red' , width:'100%'}}
+         onPress={() => this.logout()} >
+           <Text>Logout</Text>
+         </Button>
         
-      </View>
+      </Container>
     );
   }
 }
