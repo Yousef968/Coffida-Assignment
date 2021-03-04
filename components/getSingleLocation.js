@@ -175,9 +175,7 @@ class getSingleLocation extends Component {
 
 
   render() {
-    const navigation = this.props.navigation;
-    const data = this.state.userData;
-    const myMap = new Map(Object.entries(data));
+    const myMap = new Map(Object.entries(this.state.userData));
     let loc_id = myMap.get('location_id');
     console.log(loc_id);
   
@@ -194,6 +192,8 @@ class getSingleLocation extends Component {
 <View style = {{flex:1}} >
 
 
+<View style={{marginBottom:10}} >
+
            <Button title="Add review for this location"
             onPress={() =>
               this.props.navigation.navigate('Add review', {
@@ -201,48 +201,23 @@ class getSingleLocation extends Component {
               })
             }
           />
-          <View style={{marginBottom:10}}></View>
-          <Button
-           icon={
-            <Icon
-            name= "heart"
-            size={20}
-            color="white"
-          /> 
-        }
-          title=" (Favourite this location)"
-          onPress={() => this.favLoc()}
-
-          />
-          <View style={{marginBottom:10}}></View>
-            <Button
-            icon={
-            <FontAwesome5
-            name="heart-broken"
-            size={20}
-            color="white"
-            
-            />
-            }
-          title="   (Unfavourite this location)"
-          onPress={() => this.unfavLoc()}
-          />
-       
-
-          <Text style={{fontSize: 22, color: 'black'}}>
+          </View>
+          
+          
+          <Text style={{fontSize: 20, color: 'black' , textAlign:'center'}}>
             Location
           </Text>
 
 
 
 
-
+<TouchableOpacity  onPress={() => this.props.navigation.navigate('FavouriteALocation' , {loc_id: loc_id})}>
         
 
 
 
 
-            <Text>
+            <Text style={{fontSize: 14}}>
             {'\n'}
             Location_Name: {myMap.get('location_name')}
             {'\n'}
@@ -263,7 +238,8 @@ class getSingleLocation extends Component {
             Avg_Cleanliness_Rating: {myMap.get('avg_clenliness_rating')}
             {'\n'}
           </Text>
-          <Text style={{fontSize: 22, color: 'black'}}>
+          </TouchableOpacity>
+          <Text style={{fontSize: 20, color: 'black' , textAlign:'center'}}>
             Reviews
             </Text>
             
@@ -274,18 +250,18 @@ class getSingleLocation extends Component {
 
                 
 
-             <Text>{"\n"}</Text>
-             <TouchableOpacity  onPress={() => this.props.navigation.navigate("likeRevs", {rev_id: item.review_id , loc_id: loc_id})} >
              
+             
+            <Text></Text>
             
              
-                <Text>Overall rating: {item.overall_rating}</Text>
+            <Text>Overall rating: {item.overall_rating} </Text>
                 <Text>Price rating: {item.price_rating}</Text>
                 <Text>Quality rating: {item.quality_rating}</Text>
                 <Text>Cleanliness rating: {item.clenliness_rating}</Text>
            <Text>Review body: {item.review_body}             </Text>
 
-          
+           <TouchableOpacity  onPress={() => this.props.navigation.navigate("likeRevs", {rev_id: item.review_id , loc_id: loc_id})} >
            <Text>Likes: {item.likes} </Text>
            </TouchableOpacity>
        

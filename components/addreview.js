@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {Button, ToastAndroid,Text, Alert} from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Filter from 'bad-words';
 
 
 class AddReview extends Component {
@@ -20,12 +19,13 @@ class AddReview extends Component {
       review_body_check:'',
     };
   }
- 
 
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      
+
+     // console.log(LOL);
+
      
     });
   }
@@ -34,6 +34,7 @@ class AddReview extends Component {
   }
 
   checkLoggedIn = async () => {
+    
     const value = await AsyncStorage.getItem('@session_token');
 
     if (value === null) {
@@ -47,12 +48,13 @@ class AddReview extends Component {
     }
   };
   addreview = async () => {
-    const filter = new Filter();
-    filter.addWords('tea','Tea','cakes','Cakes');
-    if(this.state.review_body.includes(filter)){
+    var LOL = require('./profanity.json');
+
+    if(this.state.review_body.includes(LOL)){
       Alert.alert("Error");
     }
-    if(this.state.review_body==''){
+    else if(this.state.review_body=='')
+    {
       this.setState({review_body_check: "Review body can't be empty"})
     }
     else{

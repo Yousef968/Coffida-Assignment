@@ -127,7 +127,6 @@ class HandlePhotos extends Component {
   
 
   render() {
-    const navigation = this.props.navigation;
 
     return (
       <View style={{flex:1, width:'100%'}}>
