@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, ToastAndroid} from 'react-native';
+import {View, Alert ,ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
@@ -27,7 +27,6 @@ class HandlePhotos extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -68,15 +67,15 @@ class HandlePhotos extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
-        //  return response.json();
+          throw "Photo added";
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {
           throw 'Something went wrong';
         }
       })
-      .then(async (responseJson) => {
-        console.log('Photo added', responseJson);
+      .then(async () => {
+        console.log('Photo added');
         ToastAndroid.show('Photo added', ToastAndroid.SHORT);
         this.props.navigation.navigate("Home");
         
@@ -104,7 +103,7 @@ class HandlePhotos extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
-            console.log("Deleted the photo");
+            throw 'Deleted the photo!';
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {

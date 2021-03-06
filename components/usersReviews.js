@@ -113,7 +113,7 @@ class usersReviews extends Component {
                 size={20}
                 color="white"
               /> 
-            } title="  (Add photo to this review)" 
+            } title="  (Add/Delete Photo of this review)" 
               onPress={() => this.props.navigation.navigate("HandlePhotos" , {rev_id: item.review.review_id , loc_id: item.location.location_id})} 
               />
               

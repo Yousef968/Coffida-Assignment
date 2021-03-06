@@ -37,6 +37,7 @@ import likeRevs from './components/likeRevs';
 import likedreviews from './components/likedreviews';
 import SearchResults from './components/SearchResults';
 import FavouriteALocation from './components/FavouriteALocation';
+import DisplayAnImage from './components/viewPhoto';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -96,7 +97,7 @@ class App extends Component {
           <Stack.Screen name="likedreviews" component={likedreviews} />
           <Stack.Screen name="SearchResults" component={SearchResults}/>
           <Stack.Screen name="FavouriteALocation" component={FavouriteALocation} options={{title: "Favourite a location"}}/>
-
+<Stack.Screen name = "viewPhoto" component={DisplayAnImage} options={{title: "View photo"}} />
 
 
 

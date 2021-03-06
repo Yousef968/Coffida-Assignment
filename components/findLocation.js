@@ -150,7 +150,7 @@ class findLocation extends Component {
           />
           
           <Button
-          block style={{backgroundColor: 'red' , height:100}}
+          block style={{backgroundColor: 'red' , height:50, marginBottom:10}}
           onPress={() => this.props.navigation.navigate("Search")} >
             <Text>Filter search</Text>
           </Button>

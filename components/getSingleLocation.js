@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import {
-  Text,
+  
   View,
   ToastAndroid,
   Alert,
   ActivityIndicator,
   FlatList,
-  TouchableOpacity,
+  TouchableOpacity,Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button} from 'react-native-elements';
+import {  Button, Text } from 'native-base';
+
 
 
 
@@ -194,13 +195,18 @@ class getSingleLocation extends Component {
 
 <View style={{marginBottom:10}} >
 
-           <Button title="Add review for this location"
+           <Button 
+           block style={{backgroundColor: 'blue' , width:'100%'}} 
             onPress={() =>
               this.props.navigation.navigate('Add review', {
                 loc_id: myMap.get('location_id'),
               })
-            }
-          />
+            } >
+              <Text>Add review for this location</Text>
+            </Button>
+             
+            
+           
           </View>
           
           
@@ -217,7 +223,7 @@ class getSingleLocation extends Component {
 
 
 
-            <Text style={{fontSize: 14}}>
+            <Text style={{fontSize: 13.75}}>
             {'\n'}
             Location_Name: {myMap.get('location_name')}
             {'\n'}
@@ -255,15 +261,22 @@ class getSingleLocation extends Component {
             <Text></Text>
             
              
-            <Text>Overall rating: {item.overall_rating} </Text>
-                <Text>Price rating: {item.price_rating}</Text>
-                <Text>Quality rating: {item.quality_rating}</Text>
-                <Text>Cleanliness rating: {item.clenliness_rating}</Text>
-           <Text>Review body: {item.review_body}             </Text>
+            <Text style={{fontSize:15}}>Overall rating: {item.overall_rating} </Text>
+            <Text style={{fontSize:15}}>Price rating: {item.price_rating}</Text>
+            <Text style={{fontSize:15}}>Quality rating: {item.quality_rating}</Text>
+            <Text style={{fontSize:15}}>Cleanliness rating: {item.clenliness_rating}</Text>
+            <Text style={{fontSize:15}}>Review body: {item.review_body}             </Text>
 
            <TouchableOpacity  onPress={() => this.props.navigation.navigate("likeRevs", {rev_id: item.review_id , loc_id: loc_id})} >
-           <Text>Likes: {item.likes} </Text>
+           <Text style={{fontSize:15}}>Likes: {item.likes} </Text>
            </TouchableOpacity>
+        
+           <Button
+           block style={{backgroundColor: 'blue' , width:'25%'}} 
+           
+           onPress={() => this.props.navigation.navigate("viewPhoto" , {rev_id: item.review_id, loc_id: loc_id})} >
+             <Text style={{fontSize:10}}>view photo</Text> 
+           </Button>
        
            
            </View>

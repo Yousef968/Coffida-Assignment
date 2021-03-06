@@ -18,6 +18,7 @@ class Search extends Component {
       quality_rating:0,
       clenliness_rating:0,
       PickerValue:'',
+      listData:[],
     };
   }
 
@@ -86,11 +87,7 @@ class Search extends Component {
 
     let url = 'http://10.0.2.2:3333/api/1.0.0/find?';
 
-    console.log(this.state.query);
-    console.log("Overall rating",this.state.overall_rating);
-    console.log("Price rating",this.state.price_rating);
-    console.log("Quality rating",this.state.quality_rating);
-    console.log("Clen rating",this.state.clenliness_rating);
+  
 
     if (this.state.query != '') {
       url += 'q=' + this.state.query + '&';
@@ -113,16 +110,14 @@ class Search extends Component {
       url += 'clenliness_rating=' + this.state.clenliness_rating + '&';
       console.log(this.state.clenliness_rating);
     }
-    if(this.state.PickerValue)
+   
   
     this.GetSearchInfo(url);
-    console.log("Overall rating after",this.state.overall_rating);
-    console.log("Price rating after",this.state.price_rating);
-    console.log("Quality rating after",this.state.quality_rating);
-    console.log("Clen rating after",this.state.clenliness_rating);
+    
   };
 
   ratingCompleted(rating,name){
+    console.log(rating,name);
       let stateObject = () => {
           let returnObj = {};
           returnObj[name] = rating;
@@ -157,37 +152,27 @@ class Search extends Component {
           size={15}
           defaultRating={0}
 
-          onFinishedRating={(rating) => this.ratingCompleted(rating, "overall_rating")} 
+          onFinishRating={(rating) => this.ratingCompleted(rating, "overall_rating")} 
           />
 <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Price Rating</Text>          
 <AirbnbRating
           size={15}
           defaultRating={0}
-          onFinishedRating={(rating) => this.ratingCompleted(rating, "price_rating")} 
+          onFinishRating={(rating) => this.ratingCompleted(rating, "price_rating")} 
           />
 <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Quality Rating</Text>          
 <AirbnbRating
           size={15}
           defaultRating={0}
-          onFinishedRating={(rating) => this.ratingCompleted(rating, "quality_rating")} 
+          onFinishRating={(rating) => this.ratingCompleted(rating, "quality_rating")} 
           />
 <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Clenliness Rating</Text>         
  <AirbnbRating
           size={15}
           defaultRating={0}
-          onFinishedRating={(rating) => this.ratingCompleted(rating, "clenliness_rating")} 
+          onFinishRating={(rating) => this.ratingCompleted(rating, "clenliness_rating")} 
           />
-          <Picker 
-          selectedValue={this.state.PickerValue}
-          onValueChange={(PickerValue) => this.setState({PickerValue})} >
-
-            <Picker.Item label="Favourite" value="Favourite" />
-            <Picker.Item label="Liked" value="Liked" />
-            <Picker.Item label="Reviewed" value="Reviewed" />
-
-
-
-          </Picker>
+          
           <Button title="Search" onPress={() => this.Search()} />
           <FlatList
             data={this.state.listData}
