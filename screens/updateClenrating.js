@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
-import {View,  Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button , Text} from 'native-base';
 
 
-
-
-class updateFname extends Component {
+class updateClenrating extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-      first_name_error:'',
-      first_name: '',
+
+      clenliness_rating: '',
+      clen_rating_check:'',
+      clen_rating_length_check:'',
      
       
     };
@@ -32,7 +32,6 @@ class updateFname extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else{
       this.setState({
@@ -41,30 +40,45 @@ class updateFname extends Component {
   }
 };
 
-  updateUser = async () => {
-    if(this.state.first_name=='')
-    {
-      this.setState({first_name_error: "Name can't be empty"})
+  updateRating = async () => {
+    if(this.state.clenliness_rating==''){
+      this.setState({clen_rating_check: "cleanliness rating can't be left empty"})
     }
-    else {
+    if(this.state.clenliness_rating>6){
+      this.setState({clen_rating_length_check: "Rating can't be more than 5"})
+    }
+    else{
+
+    let updateReview = {};
 
     const value = await AsyncStorage.getItem('@session_token');
-    const id = await AsyncStorage.getItem('@user_id');
+    const loc_id = this.props.route.params.loc_id;
+    const rev_id = this.props.route.params.rev_id;
+    
+
+    
+   
+    
+    
+
+   
+     updateReview.clenliness_rating = parseInt(this.state.clenliness_rating);
+     
 
 
 
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id , {
       method: 'patch',
       headers: {
         'X-Authorization': value,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(updateReview),
     })
       .then((response) => {
         if (response.status === 200) {
-         // return response.json();
         } else if (response.status === 400) {
+          console.log("Overall rating updated")
           throw 'Bad Request';
         } else if (response.status === 401) {
           ToastAndroid.show("You're not logged in!", ToastAndroid.SHORT);
@@ -89,10 +103,7 @@ class updateFname extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
-}
-   
-  
-
+  }
   render() {
     const navigation = this.props.navigation;
     if (this.state.isLoading) {
@@ -104,19 +115,22 @@ class updateFname extends Component {
     } else {
       return (
         <View>
-
-          <Text style={{textAlign:'center'}}> Update first name</Text>
+          <Text style={{textAlign:'center'}} >Update cleanliness rating</Text>
 
           <TextInput
-            placeholder="Enter first name"
-            onChangeText={(first_name) => this.setState({first_name})}
-            value={this.state.first_name}
+            placeholder="Enter cleanliness rating..."
+            onChangeText={(clenliness_rating) => this.setState({clenliness_rating})}
+            value={this.state.clenliness_rating}
+            keyboardType="numeric"
             style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-          <Text style={{color:'red'}} > {this.state.first_name_error}</Text>
+                          <Text style={{color:'red'}} > {this.state.clen_rating_check}</Text>
+                          <Text style={{color:'red'}} > {this.state.clen_rating_length_check}</Text>
+
+
          
           <Button
-          onPress={() => this.updateUser()} 
+          onPress={() => this.updateRating()} 
           block style={{backgroundColor: 'red' , width:'100%'}} >
             <Text>Update</Text>
           </Button>
@@ -126,4 +140,4 @@ class updateFname extends Component {
   }
 }
 
-export default updateFname;
+export default updateClenrating;

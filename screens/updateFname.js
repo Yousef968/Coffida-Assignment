@@ -4,15 +4,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button , Text} from 'native-base';
 
 
-class updateQualityrating extends Component {
+
+
+class updateFname extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-
-      quality_rating: '',
-     quality_rating_check:'',
+      first_name_error:'',
+      first_name: '',
+     
       
     };
   }
@@ -30,6 +32,7 @@ class updateQualityrating extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
+      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else{
       this.setState({
@@ -38,41 +41,30 @@ class updateQualityrating extends Component {
   }
 };
 
-  updateRating = async () => {
-    if(this.state.quality_rating==''){
-      this.setState({quality_rating_check: "quality rating can't be left empty"})
+  updateUser = async () => {
+    if(this.state.first_name=='')
+    {
+      this.setState({first_name_error: "first name can't be empty"})
     }
-    else{
-
-    let updateReview = {};
+    else {
 
     const value = await AsyncStorage.getItem('@session_token');
-    const loc_id = this.props.route.params.loc_id;
-    const rev_id = this.props.route.params.rev_id;
-    
-
-    
-   
-    
-    
-
-     updateReview.quality_rating = parseInt(this.state.quality_rating);
-     
+    const id = await AsyncStorage.getItem('@user_id');
 
 
 
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id , {
+    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
       method: 'patch',
       headers: {
         'X-Authorization': value,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updateReview),
+      body: JSON.stringify(this.state),
     })
       .then((response) => {
         if (response.status === 200) {
+         // return response.json();
         } else if (response.status === 400) {
-          console.log("Overall rating updated")
           throw 'Bad Request';
         } else if (response.status === 401) {
           ToastAndroid.show("You're not logged in!", ToastAndroid.SHORT);
@@ -98,6 +90,8 @@ class updateQualityrating extends Component {
       });
   };
 }
+   
+  
 
   render() {
     const navigation = this.props.navigation;
@@ -110,19 +104,19 @@ class updateQualityrating extends Component {
     } else {
       return (
         <View>
-          <Text style={{textAlign:'center'}} >Update quality rating</Text>
+
+          <Text style={{textAlign:'center'}}> Update first name</Text>
 
           <TextInput
-            placeholder="Enter quality rating..."
-            onChangeText={(quality_rating) => this.setState({quality_rating})}
-            value={this.state.quality_rating}
-            keyboardType="numeric"
+            placeholder="Enter first name"
+            onChangeText={(first_name) => this.setState({first_name})}
+            value={this.state.first_name}
             style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-                         <Text style={{color:'red'}} > {this.state.quality_rating_check}</Text>
-
+          <Text style={{color:'red'}} > {this.state.first_name_error}</Text>
+         
           <Button
-          onPress={() => this.updateRating()} 
+          onPress={() => this.updateUser()} 
           block style={{backgroundColor: 'red' , width:'100%'}} >
             <Text>Update</Text>
           </Button>
@@ -132,4 +126,4 @@ class updateQualityrating extends Component {
   }
 }
 
-export default updateQualityrating;
+export default updateFname;

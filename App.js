@@ -9,54 +9,40 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 
-import Home from './components/home';
-import UserManagement from './components/usermanagement';
-import LocationReviews from './components/location-reviews';
-import Signup from './components/signup';
-import Login from './components/login';
-import GetUserInfo from './components/getUserInfo';
-import AddReview from './components/addreview';
-import findLocation from './components/findLocation';
-import getSingleLocation from './components/getSingleLocation';
-import updateFname from'./components/updateFname';
-import updateLname from './components/updateLname';
-import updateEmail from './components/updateEmail';
-import updatePassword from './components/updatePassword';
-import Search from './components/Search';
-import HandleReviews from './components/HandleReviews';
-import usersReviews from './components/usersReviews';
-import favLocations from './components/favLocations';
-import updateOverallrating from './components/updateOverallrating';
-import updatePricerating from './components/updatePricerating';
-import updateQualityrating from './components/updateQualityrating';
-import updateClenrating from './components/updateClenrating';
-import updateRevbody from './components/updateRevbody';
-import HandlePhotos from './components/HandlePhotos';
-import favLocationReviews from './components/favLocationReviews';
-import likeRevs from './components/likeRevs';
-import likedreviews from './components/likedreviews';
-import SearchResults from './components/SearchResults';
-import FavouriteALocation from './components/FavouriteALocation';
-import DisplayAnImage from './components/viewPhoto';
+import Home from './screens/home';
+import UserManagement from './screens/usermanagement';
+import LocationReviews from './screens/location-reviews';
+import Signup from './screens/signup';
+import Login from './screens/login';
+import GetUserInfo from './screens/getUserInfo';
+import AddReview from './screens/addreview';
+import findLocation from './screens/findLocation';
+import getSingleLocation from './screens/getSingleLocation';
+import updateFname from './screens/updateFname';
+import updateLname from './screens/updateLname';
+import updateEmail from './screens/updateEmail';
+import updatePassword from './screens/updatePassword';
+import Search from './screens/Search';
+import HandleReviews from './screens/HandleReviews';
+import usersReviews from './screens/usersReviews';
+import favLocations from './screens/favLocations';
+import updateOverallrating from './screens/updateOverallrating';
+import updatePricerating from './screens/updatePricerating';
+import updateQualityrating from './screens/updateQualityrating';
+import updateClenrating from './screens/updateClenrating';
+import updateRevbody from './screens/updateRevbody';
+import HandlePhotos from './screens/HandlePhotos';
+import favLocationReviews from './screens/favLocationReviews';
+import likeRevs from './screens/likeRevs';
+import likedreviews from './screens/likedreviews';
+import SearchResults from './screens/SearchResults';
+import FavouriteALocation from './screens/FavouriteALocation';
+import DisplayAnImage from './screens/viewPhoto';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const colorSchemes = {
-  light:{
-    background: '#FFFFFF',
-    primary: '#512DA8',
-    text: '#121212',
-    error: '#D32F2F',
 
-  },
-  dark: {
-    background:'#121212',
-    primary: '#B39DDB',
-    text: '#FFFFFF',
-    error: '#EF9A9A',
-  },
-};
 
 class App extends Component {
   constructor(props){

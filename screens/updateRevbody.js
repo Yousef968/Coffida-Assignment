@@ -1,18 +1,20 @@
 import React, {Component} from 'react';
 import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button , Text} from 'native-base';
+import { Button, Text} from 'native-base';
 
 
-class updatePricerating extends Component {
+class updateRevbody extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
 
-      price_rating: '',
-     price_rating_check:'',
+      review_body: '',
+      review_body_check:'',
+      review_body_filter:'',
+     
       
     };
   }
@@ -39,12 +41,16 @@ class updatePricerating extends Component {
 };
 
   updateRating = async () => {
-    if(this.state.price_rating==''){
-      this.setState({price_rating_check: "price rating can't be left empty"})
+    if(this.state.review_body.includes("Tea","tea","cake","cakes","Cakes","Cake","Pastries","Pastry","Pastrys","pastries","pastry","pastrys")){
+      this.setState({review_body_filter:"Tea,Cakes or Pastries are not allowed to be in the review body!"})
     }
+    else if(this.state.review_body==''){
+      this.setState({review_body_check: "review body can't be left blank"})
+    }
+  
     else{
 
-    let updateReview = {};
+    
 
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
@@ -55,10 +61,8 @@ class updatePricerating extends Component {
    
     
     
-     
 
-     updateReview.price_rating = parseInt(this.state.price_rating);
-   
+  
 
 
 
@@ -68,7 +72,7 @@ class updatePricerating extends Component {
         'X-Authorization': value,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updateReview),
+      body: JSON.stringify(this.state),
     })
       .then((response) => {
         if (response.status === 200) {
@@ -111,18 +115,18 @@ class updatePricerating extends Component {
     } else {
       return (
         <View>
-          <Text style={{textAlign:'center'}} >Update price rating</Text>
+          <Text style={{textAlign:'center'}}>Update review body</Text>
 
           <TextInput
-            placeholder="Enter price rating..."
-            onChangeText={(price_rating) => this.setState({price_rating})}
-            value={this.state.price_rating}
-            keyboardType="numeric"
-            style={{padding: 5, borderWidth: 2, margin: 5}}
+            placeholder="Enter review body..."
+            onChangeText={(review_body) => this.setState({review_body})}
+            value={this.state.review_body}
+            style={{padding: 20, borderWidth: 2, margin: 7}}
           />
-                          <Text style={{color:'red'}} > {this.state.price_rating_check}</Text>
+                         <Text style={{color:'red'}} > {this.state.review_body_check}</Text>
+                         <Text style={{color:'red'}} > {this.state.review_body_filter}</Text>
 
-         
+
           <Button
           onPress={() => this.updateRating()} 
           block style={{backgroundColor: 'red' , width:'100%'}} >
@@ -134,4 +138,4 @@ class updatePricerating extends Component {
   }
 }
 
-export default updatePricerating;
+export default updateRevbody;

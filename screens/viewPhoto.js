@@ -7,11 +7,11 @@ class viewPhoto extends Component {
     super(props);
 
     this.state = {
-      photoData: [],
+      uri: '',
     };
   }
   componentDidMount(){
-    //  this.getPhoto();
+      this.getPhoto();
   }
 
  
@@ -28,7 +28,7 @@ class viewPhoto extends Component {
       .then((response) => {
         if (response.status === 200) {
             this.setState({
-                photoData: response,
+                uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id + '/photo' + '?'+ new Date()
             })
           
         } else if (response.status === 404) {
@@ -39,7 +39,7 @@ class viewPhoto extends Component {
       })
       
 
-      .then( (responseJson) => {
+      .then( () => {
           
 
        
@@ -71,7 +71,7 @@ class viewPhoto extends Component {
 
 
             <Image style={{width:380, height:600, marginLeft:6}}
-            source={{ uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id + '/photo'
+            source={{ uri: this.state.uri || null
 
             }}
             />

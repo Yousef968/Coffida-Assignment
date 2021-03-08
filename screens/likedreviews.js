@@ -139,7 +139,6 @@ const rev_id = this.props.route.params.rev_id;
                 <Text></Text>
                 <Text>Location name: {item.location.location_name}</Text>
                 <Text>Location town: {item.location.location_town}</Text>
-                <Text>Review ID: {item.review.review_id}</Text>
                 <Text>Overall rating: {item.review.overall_rating}</Text>
                 <Text>Price rating: {item.review.price_rating}</Text>
                 <Text>Quality rating: {item.review.quality_rating}</Text>

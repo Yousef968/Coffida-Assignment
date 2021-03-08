@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, Text} from 'native-base';
+import { Button , Text} from 'native-base';
 
 
-class updateRevbody extends Component {
+class updateOverallrating extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
 
-      review_body: '',
-      review_body_check:'',
+      overall_rating: '',
+      overall_rating_check:'',
+      overall_rating_length_check:'',
      
       
     };
@@ -40,12 +41,15 @@ class updateRevbody extends Component {
 };
 
   updateRating = async () => {
-    if(this.state.review_body==''){
-      this.setState({review_body_check: "review body can't be left blank"})
+    if(this.state.overall_rating==''){
+      this.setState({overall_rating_check: "overall rating can't be left empty"})
+    }
+    if(this.state.overall_rating>6){
+      this.setState({overall_rating_length_check: "Rating can't be more than 5"})
     }
     else{
 
-    
+    let updateReview = {};
 
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
@@ -56,8 +60,9 @@ class updateRevbody extends Component {
    
     
     
+     updateReview.overall_rating = parseInt(this.state.overall_rating);
 
-  
+   
 
 
 
@@ -67,7 +72,7 @@ class updateRevbody extends Component {
         'X-Authorization': value,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(updateReview),
     })
       .then((response) => {
         if (response.status === 200) {
@@ -110,16 +115,19 @@ class updateRevbody extends Component {
     } else {
       return (
         <View>
-          <Text style={{textAlign:'center'}}>Update review body</Text>
+          <Text style={{textAlign: 'center'}} >Update overall rating</Text>
 
           <TextInput
-            placeholder="Enter review body..."
-            onChangeText={(review_body) => this.setState({review_body})}
-            value={this.state.review_body}
-            style={{padding: 20, borderWidth: 2, margin: 7}}
+            placeholder="Enter overall rating..."
+            onChangeText={(overall_rating) => this.setState({overall_rating})}
+            value={this.state.overall_rating}
+            keyboardType="numeric"
+            style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-                         <Text style={{color:'red'}} > {this.state.review_body_check}</Text>
+                          <Text style={{color:'red'}} > {this.state.overall_rating_check}</Text>
+                          <Text style={{color:'red'}} > {this.state.overall_rating_length_check}</Text>
 
+         
           <Button
           onPress={() => this.updateRating()} 
           block style={{backgroundColor: 'red' , width:'100%'}} >
@@ -131,4 +139,4 @@ class updateRevbody extends Component {
   }
 }
 
-export default updateRevbody;
+export default updateOverallrating;

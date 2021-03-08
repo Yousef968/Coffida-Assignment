@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
-import {View, Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {View,  Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button , Text} from 'native-base';
 
 
-class updateClenrating extends Component {
+class updateQualityrating extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
 
-      clenliness_rating: '',
-      clen_rating_check:'',
-     
+      quality_rating: '',
+     quality_rating_check:'',
+     quality_rating_length_check:'',
       
     };
   }
@@ -40,8 +40,11 @@ class updateClenrating extends Component {
 };
 
   updateRating = async () => {
-    if(this.state.clenliness_rating==''){
-      this.setState({clen_rating_check: "cleanliness rating can't be left empty"})
+    if(this.state.quality_rating==''){
+      this.setState({quality_rating_check: "quality rating can't be left empty"})
+    }
+    if(this.state.quality_rating>6){
+      this.setState({quality_rating_length_check: "Rating can't be more than 5"})
     }
     else{
 
@@ -57,8 +60,7 @@ class updateClenrating extends Component {
     
     
 
-   
-     updateReview.clenliness_rating = parseInt(this.state.clenliness_rating);
+     updateReview.quality_rating = parseInt(this.state.quality_rating);
      
 
 
@@ -99,7 +101,8 @@ class updateClenrating extends Component {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
-  }
+}
+
   render() {
     const navigation = this.props.navigation;
     if (this.state.isLoading) {
@@ -111,18 +114,18 @@ class updateClenrating extends Component {
     } else {
       return (
         <View>
-          <Text style={{textAlign:'center'}} >Update cleanliness rating</Text>
+          <Text style={{textAlign:'center'}} >Update quality rating</Text>
 
           <TextInput
-            placeholder="Enter cleanliness rating..."
-            onChangeText={(clenliness_rating) => this.setState({clenliness_rating})}
-            value={this.state.clenliness_rating}
+            placeholder="Enter quality rating..."
+            onChangeText={(quality_rating) => this.setState({quality_rating})}
+            value={this.state.quality_rating}
             keyboardType="numeric"
             style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-                          <Text style={{color:'red'}} > {this.state.clen_rating_check}</Text>
+                         <Text style={{color:'red'}} > {this.state.quality_rating_check}</Text>
+                         <Text style={{color:'red'}} > {this.state.quality_rating_length_check}</Text>
 
-         
           <Button
           onPress={() => this.updateRating()} 
           block style={{backgroundColor: 'red' , width:'100%'}} >
@@ -134,4 +137,4 @@ class updateClenrating extends Component {
   }
 }
 
-export default updateClenrating;
+export default updateQualityrating;

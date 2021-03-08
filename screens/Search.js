@@ -17,7 +17,7 @@ class Search extends Component {
       price_rating:0,
       quality_rating:0,
       clenliness_rating:0,
-      PickerValue:'',
+      limit:'',
       listData:[],
     };
   }
@@ -110,6 +110,9 @@ class Search extends Component {
       url += 'clenliness_rating=' + this.state.clenliness_rating + '&';
       console.log(this.state.clenliness_rating);
     }
+    if(this.state.limit!='') {
+      url += 'limit=' + this.state.limit + '&';
+    }
    
   
     this.GetSearchInfo(url);
@@ -127,7 +130,6 @@ class Search extends Component {
       } 
 
   render() {
-    const navigation = this.props.navigation;
 
 
     if (this.state.isLoading) {
@@ -145,6 +147,12 @@ class Search extends Component {
             placeholder="Enter your search"
             value={this.state.query}
             onChangeText={(query) => this.setState({query: query})}
+            style={{padding: 5, borderWidth: 1, margin: 5}}
+          />
+           <TextInput
+            placeholder="Enter your limit"
+            value={this.state.limit}
+            onChangeText={(limit) => this.setState({limit: limit})}
             style={{padding: 5, borderWidth: 1, margin: 5}}
           />
 <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Overall Rating</Text>          

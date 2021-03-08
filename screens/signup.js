@@ -12,22 +12,29 @@ class SignupScreen extends Component {
       last_name: '',
       email: '',
       password: '',
-      first_name_error:'',
-      last_name_error:'',
       email_error:'',
       password_error:'',
       password_length:'',
+      first_name_check:'',
+      last_name_check:'',
 
     };
   }
   signup = () => {
-    //Validation Here
+    
     if(!this.state.email.includes('@')){
       this.setState({email_error: "not a valid email"})
     }
    if(this.state.password.length <5){
      this.setState({password_length: "password must be greater than 5 characters"})
    }
+   if(this.state.first_name == ''){
+     this.setState({first_name_check: "first name can't be empty"})
+   }
+   if(this.state.last_name == ''){
+    this.setState({last_name_check: "first name can't be empty"})
+  }
+
 else {
 
 
@@ -59,18 +66,7 @@ else {
       });
   };
   }
-  FnameValidation(){
-    if (this.state.first_name=='')
-    {
-      this.setState({first_name_error: "first name can't be empty"})
-    }
-  }
-  LnameValidation(){
-    if(this.state.last_name=='')
-    {
-      this.setState({last_name_error: "last name can't be empty"})
-    }
-  }
+
   render() {
     return (
       <View>
@@ -78,17 +74,17 @@ else {
           placeholder="Enter your first name..."
           onChangeText={(first_name) => this.setState({first_name})}
           value={this.state.first_name}
-          onBlur={() => this.FnameValidation()}
           style={{padding: 5, borderWidth: 2, margin: 5}}
         />
+        <Text style={{color:'red'}} >{this.state.first_name_check}</Text>
         <View style={{height:10}} />
         <TextInput
           placeholder="Enter your last name"
           onChangeText={(last_name) => this.setState({last_name})}
           value={this.state.last_name}
-          onBlur={() => this.LnameValidation()}
           style={{padding: 5, borderWidth: 2, margin: 5}}
         />
+        <Text style={{color:'red'}} >{this.state.last_name_check}</Text>
 
         <View style={{height:10}} />
 

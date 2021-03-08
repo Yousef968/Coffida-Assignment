@@ -67,7 +67,7 @@ class HandlePhotos extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
-          throw "Photo added";
+          
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {
@@ -103,7 +103,7 @@ class HandlePhotos extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
-            throw 'Deleted the photo!';
+            
         } else if (response.status === 400) {
           throw 'Failed Validation';
         } else {
@@ -111,7 +111,7 @@ class HandlePhotos extends Component {
         }
       })
       .then(async () => {
-        ToastAndroid.show('Deleted your review', ToastAndroid.SHORT);
+        ToastAndroid.show('Deleted your photo!', ToastAndroid.SHORT);
         this.props.navigation.navigate('Home');
       })
       .catch((error) => {
@@ -137,6 +137,7 @@ class HandlePhotos extends Component {
               flex:1 , width:'100%'
               
           }}
+          captureAudio={false}
           />
           <Button
           title="Take photo" 

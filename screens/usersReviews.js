@@ -106,16 +106,7 @@ class usersReviews extends Component {
           renderItem={({item}) => (
             <View>
             
-              <Button
-              icon={
-                <FontAwesome5
-                name= "camera"
-                size={20}
-                color="white"
-              /> 
-            } title="  (Add/Delete Photo of this review)" 
-              onPress={() => this.props.navigation.navigate("HandlePhotos" , {rev_id: item.review.review_id , loc_id: item.location.location_id})} 
-              />
+            
               
         
               <TouchableOpacity onPress={() => this.props.navigation.navigate("HandleReviews", {rev_id: item.review.review_id , loc_id: item.location.location_id})} >
@@ -146,9 +137,20 @@ class usersReviews extends Component {
            <Text>Review body: {item.review.review_body} </Text>
            </TouchableOpacity>
            <Text>Likes rating: {item.review.likes} </Text>
+           <Button
+              icon={
+                <FontAwesome5
+                name= "camera"
+                size={20}
+                color="white"
+              /> 
+            } title="  (Add/Delete Photo of this review)" 
+              onPress={() => this.props.navigation.navigate("HandlePhotos" , {rev_id: item.review.review_id , loc_id: item.location.location_id})} 
+              />
            </View>
             )}
           keyExtractor ={(item) => item.review.review_id.toString()}          />
+          
            
 
 

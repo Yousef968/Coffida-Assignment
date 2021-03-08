@@ -94,7 +94,7 @@ class GetUserInfo extends Component {
             {'\n'}
           </Text>
 
-          <Text> User ID: {myMap.get('user_id')}</Text>
+         
 
 
 
