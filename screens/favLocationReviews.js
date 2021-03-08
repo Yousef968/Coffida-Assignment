@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import { View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
+import {
+  View,
+  ToastAndroid,
+  Alert,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, Text } from 'native-base';
+import {Text} from 'native-base';
 
 class favLocationReviews extends Component {
   constructor(props) {
@@ -30,7 +36,6 @@ class favLocationReviews extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -39,10 +44,7 @@ class favLocationReviews extends Component {
     }
   };
 
-  
-  
   getInfo = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
 
@@ -56,8 +58,8 @@ class favLocationReviews extends Component {
           return response.json();
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
 
@@ -77,14 +79,8 @@ class favLocationReviews extends Component {
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
- 
-  
 
   render() {
-    console.log(this.state.userData);
-
-
-
     if (this.state.isLoading) {
       return (
         <View>
@@ -93,58 +89,28 @@ class favLocationReviews extends Component {
       );
     } else {
       return (
-         <View style={{ flex:1, width: '100%'}}>
-        
-         
-
-    
-            <Text style={{fontSize: 22, color: 'black'}}>
-             Reviews 
-                </Text>
-                <FlatList
-          data = {this.state.userData.location_reviews}
-          renderItem={({item}) => (
+        <View style={{flex: 1, width: '100%'}}>
+          <Text style={{fontSize: 22, color: 'black'}}>Reviews</Text>
+          <FlatList
+            data={this.state.userData.location_reviews}
+            renderItem={({item}) => (
               <View>
-              
-              
                 <Text></Text>
-                
-    
-             
-           
 
-           <Text>Overall rating: {item.overall_rating} </Text>
-           <Text>Price rating: {item.price_rating} </Text>
-           <Text>Quality rating: {item.quality_rating} </Text>
-           <Text>Clenliness rating: {item.clenliness_rating} </Text>
-           <Text>Review body: {item.review_body} </Text>
-           <Text>Likes rating: {item.likes} </Text>
-           
-
-
-
-
-
-           
-            </View>
-          )}
-          keyExtractor ={(item) => item.review_id.toString()}        
-            />
-          
-         
-
-
-
- 
-
-
-
-          
+                <Text>Overall rating: {item.overall_rating} </Text>
+                <Text>Price rating: {item.price_rating} </Text>
+                <Text>Quality rating: {item.quality_rating} </Text>
+                <Text>Clenliness rating: {item.clenliness_rating} </Text>
+                <Text>Review body: {item.review_body} </Text>
+                <Text>Likes rating: {item.likes} </Text>
+              </View>
+            )}
+            keyExtractor={(item) => item.review_id.toString()}
+          />
         </View>
       );
     }
   }
 }
-
 
 export default favLocationReviews;

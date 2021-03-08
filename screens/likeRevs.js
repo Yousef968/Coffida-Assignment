@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { Text, View,ToastAndroid, Alert,  ActivityIndicator, ScrollView, TouchableOpacity,FlatList} from 'react-native';
+import {View, ToastAndroid, Alert, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -31,7 +31,6 @@ class likeRevs extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -41,33 +40,36 @@ class likeRevs extends Component {
   };
 
   likeReview = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
-const rev_id = this.props.route.params.rev_id;
+    const rev_id = this.props.route.params.rev_id;
     return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/review/' + rev_id + '/like', {
-      method: 'post',
-      headers: {
-        'X-Authorization': value,
+        method: 'post',
+        headers: {
+          'X-Authorization': value,
+        },
       },
-    })
+    )
       .then((response) => {
         if (response.status === 200) {
-          console.log("Review liked");
+          console.log('Review liked');
+        } else if (response.status === 400) {
+          throw 'Bad request';
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 404) {
+          throw 'Not found';
+        } else if (response.status === 500){
+          throw 'Server Error';
         }
       })
-      
 
       .then(async () => {
         this.setState({
           isLoading: false,
-          
         });
         ToastAndroid.show('Review liked',ToastAndroid.SHORT);
+        this.props.navigation.navigate("Home");
       })
       .catch((error) => {
         console.log(error);
@@ -76,7 +78,6 @@ const rev_id = this.props.route.params.rev_id;
   };
 
   unlikeReview = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
 const rev_id = this.props.route.params.rev_id;
@@ -91,18 +92,21 @@ const rev_id = this.props.route.params.rev_id;
           console.log("Review unliked");
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 403) {
+          throw 'Forbidden';
+        } else if (response.status === 404){
+          throw 'Not Found';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
-      
 
       .then(async () => {
         this.setState({
           isLoading: false,
-          
         });
         ToastAndroid.show('Review unliked',ToastAndroid.SHORT);
+        this.props.navigation.navigate("Home");
       })
       .catch((error) => {
         console.log(error);
@@ -112,10 +116,7 @@ const rev_id = this.props.route.params.rev_id;
   
 
   render() {
-    const data = this.state.userData
-    const data1 = this.state.reviewData
-    const myMap = new Map(Object.entries(data));
-    console.log(myMap);
+    
 
 
     if (this.state.isLoading) {
@@ -126,12 +127,11 @@ const rev_id = this.props.route.params.rev_id;
       );
     } else {
       return (
-          <View style={{flex:1}} >
-        <View style={{height:20}} />
+        <View style={{flex: 1}}>
+          <View style={{height: 20}} />
 
 
-
-            <Button
+          <Button
             icon={
               <Icon
                 name="thumbs-o-up"
@@ -154,40 +154,11 @@ const rev_id = this.props.route.params.rev_id;
             }
                 title="  (Unlike review)"
                 onPress={() => this.unlikeReview()} />
-                
+ </View>
 
-        
-             
-            
-           
-
-             
-        
-             
-       
-
-
-
-
-
-           
-            </View>
-         
-          
-         
-
-
-
- 
-
-
-
-          
         
       );
     }
   }
 }
-
-
 export default likeRevs;

@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
-import {  View,ToastAndroid, Alert,  ActivityIndicator, StyleSheet, TouchableOpacity,FlatList} from 'react-native';
+import {
+  View,
+  ToastAndroid,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button , Text} from 'native-base';
+import {Button, Text} from 'native-base';
 
 class GetUserInfo extends Component {
   constructor(props) {
@@ -30,7 +37,6 @@ class GetUserInfo extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -40,10 +46,8 @@ class GetUserInfo extends Component {
   };
 
   getInfo = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const id = await AsyncStorage.getItem('@user_id');
-    console.log(id);
     return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
       headers: {
         'X-Authorization': value,
@@ -54,8 +58,10 @@ class GetUserInfo extends Component {
           return response.json();
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 404) {
+          throw 'Not found';
+        } else if (response.status === 500) {
+          throw 'Server error';
         }
       })
 
@@ -63,9 +69,7 @@ class GetUserInfo extends Component {
         this.setState({
           isLoading: false,
           userData: responseJson,
-          reviewData: responseJson,       
         });
-        console.log(this.state.userData);
       })
       .catch((error) => {
         console.log(error);
@@ -74,10 +78,7 @@ class GetUserInfo extends Component {
   };
 
   render() {
- 
     const myMap = new Map(Object.entries(this.state.userData));
-    
-
 
     if (this.state.isLoading) {
       return (
@@ -87,18 +88,11 @@ class GetUserInfo extends Component {
       );
     } else {
       return (
-         <View style={styles.container}>
-        
+        <View style={styles.container}>
           <Text style={{fontSize: 19.5, color: 'red'}}>
             Click on the user details you wish to update!
             {'\n'}
           </Text>
-
-         
-
-
-
-
 
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('update first name')}>
@@ -114,52 +108,29 @@ class GetUserInfo extends Component {
           </TouchableOpacity>
           <View style={styles.space} />
           <Button
-            block style={{backgroundColor: 'red' , width:'100%'}}
-            onPress={() => this.props.navigation.navigate('update password')} >
-              <Text>Update Password</Text>
-            </Button>
-            <View style={styles.space} />
-            <Button 
-            block style={{backgroundColor: 'red' , width:'100%'}}
-            onPress={() => this.props.navigation.navigate('favLocations')} >
-              <Text>Get your fav locations</Text>
-            </Button>
-            <View style={styles.space} />
-                    
-                    <Button
-            block style={{backgroundColor: 'red' , width:'100%'}}
-            onPress={() => this.props.navigation.navigate('usersReviews')} >
-              <Text>Get your reviews</Text>
-            </Button>
-            <View style={styles.space} />
-            <Button
-            block style={{backgroundColor: 'red' , width:'100%'}}
-            onPress={() => this.props.navigation.navigate("likedreviews")} >
-              <Text>Get your liked reviews</Text>
-            </Button>
-            
+            block style={{backgroundColor: 'red', width: '100%'}}
+            onPress={() => this.props.navigation.navigate('update password')}>
+            <Text>Update Password</Text>
+          </Button>
+          <View style={styles.space} />
+          <Button
+            block style={{backgroundColor: 'red', width: '100%'}}
+            onPress={() => this.props.navigation.navigate('favLocations')}>
+            <Text>Get your fav locations</Text>
+          </Button>
+          <View style={styles.space} />
 
-   
-
-
-
-
-
-
-
-            
-             
-        
-          
-         
-
-
-
- 
-
-
-
-          
+          <Button
+            block style={{backgroundColor: 'red', width: '100%'}}
+            onPress={() => this.props.navigation.navigate('usersReviews')}>
+            <Text>Get your reviews</Text>
+          </Button>
+          <View style={styles.space} />
+          <Button
+            block style={{backgroundColor: 'red', width: '100%'}}
+            onPress={() => this.props.navigation.navigate('likedreviews')}>
+            <Text>Get your liked reviews</Text>
+          </Button>
         </View>
       );
     }
@@ -168,16 +139,15 @@ class GetUserInfo extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
   },
   text: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 30,
     fontWeight: 'bold',
   },
   space: {
     height: 40,
- 
   },
   container: {
     flex: 1,
@@ -185,6 +155,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'pink',
   },
-  });
-
+});
 export default GetUserInfo;

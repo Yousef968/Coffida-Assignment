@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View,ToastAndroid,  StyleSheet} from 'react-native';
+import {View, ToastAndroid, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Container,  Button, Text } from 'native-base';
+import {Container, Button, Text} from 'native-base';
 
 
 class UserManagement extends Component {
@@ -29,15 +29,14 @@ class UserManagement extends Component {
           console.log('Signed out!');
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 500){
+          throw 'Server Error';
         }
       })
 
       .then(async () => {
         await AsyncStorage.removeItem('@session_token');
-     //   await AsyncStorage.removeItem('@user_id');
-        ToastAndroid.show('Signed out!!', ToastAndroid.SHORT);
+        ToastAndroid.show('Signed out!', ToastAndroid.SHORT);
         this.props.navigation.navigate('Home');
       })
       .catch((error) => {
@@ -51,42 +50,36 @@ class UserManagement extends Component {
 
     return (
       <Container style={styles.container} >
-        <Text style={styles.text}>
-          User Management
-        </Text>
+        <Text style={styles.text}>User Management</Text>
 
         <View style={styles.space} />
         <Button
           onPress={() => navigation.navigate('Sign Up')}
-          block style={{backgroundColor: 'red' , width:'100%'}} >
+          block style={{backgroundColor: 'red', width: '100%'}}>
           <Text>Sign up</Text>
+        </Button>
 
-          </Button>
-          
-        
-              <View style={styles.space} />
+        <View style={styles.space} />
 
-        
         <Button block style={{backgroundColor: 'red' , width:'100%'}}
-         onPress={() => navigation.navigate('Login')} >
-           <Text>Login</Text>
-         </Button>
+          onPress={() => navigation.navigate('Login')}>
+          <Text>Login</Text>
+        </Button>
         <View style={styles.space} />
 
         <Button
           block style={{backgroundColor: 'red' , width:'100%'}}
           onPress={() => navigation.navigate('GetUserInfo')} >
-            <Text>Get user information</Text>
-          </Button>
-        
-                <View style={styles.space} />
+          <Text>Get user information</Text>
+        </Button>
 
-        <Button 
-        block style={{backgroundColor: 'red' , width:'100%'}}
-         onPress={() => this.logout()} >
-           <Text>Logout</Text>
-         </Button>
-        
+        <View style={styles.space} />
+
+        <Button
+          block style={{backgroundColor: 'red', width: '100%'}}
+          onPress={() => this.logout()}>
+          <Text>Logout</Text>
+        </Button>
       </Container>
     );
   }
@@ -96,7 +89,7 @@ const styles = StyleSheet.create({
     flex:1,
   },
   text: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 30,
     fontWeight: 'bold',
   },
@@ -110,7 +103,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'pink',
   },
-  });
-  
-
+});
 export default UserManagement;

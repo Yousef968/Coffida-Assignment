@@ -1,10 +1,8 @@
-import React, {Component , useState} from 'react';
-import { Text,View,ToastAndroid, ActivityIndicator, FlatList,  Alert} from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, ToastAndroid, ActivityIndicator, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TextInput} from 'react-native-gesture-handler';
-import { Rating, AirbnbRating , Button} from 'react-native-elements';
-import {Picker} from '@react-native-picker/picker';
-
+import {AirbnbRating, Button} from 'react-native-elements';
 
 class Search extends Component {
   constructor(props) {
@@ -14,23 +12,17 @@ class Search extends Component {
       isLoading: true,
       query: '',
       overall_rating: 0,
-      price_rating:0,
-      quality_rating:0,
-      clenliness_rating:0,
-      limit:'',
-      listData:[],
+      price_rating: 0,
+      quality_rating: 0,
+      clenliness_rating: 0,
+      limit: '',
+      listData: [],
     };
   }
-
 
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      console.log(this.state.query);
-      console.log("Overall rating",this.state.overall_rating);
-      console.log("Price rating",this.state.price_rating);
-      console.log("Quality rating",this.state.quality_rating);
-      console.log("Clen rating",this.state.clenliness_rating);
       //this.getInfo();
     });
   }
@@ -43,7 +35,6 @@ class Search extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -62,10 +53,12 @@ class Search extends Component {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 400) {
+          throw 'Bad Request';
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
 
@@ -74,7 +67,8 @@ class Search extends Component {
           isLoading: false,
           listData: responseJson,
         });
-        ToastAndroid.show('User info out!!', ToastAndroid.SHORT);
+        this.props.navigation.navigate("SearchResults" , {url: url})
+        
       })
       .catch((error) => {
         console.log(error);
@@ -83,55 +77,41 @@ class Search extends Component {
   };
 
   Search = () => {
-    //Validation Here
-
     let url = 'http://10.0.2.2:3333/api/1.0.0/find?';
-
-  
 
     if (this.state.query != '') {
       url += 'q=' + this.state.query + '&';
-      console.log(this.state.query);
     }
-    
+
     if (this.state.overall_rating > 0) {
-      url += "overall_rating=" + this.state.overall_rating + "&";
-      console.log(this.state.overall_rating);
+      url += 'overall_rating=' + this.state.overall_rating + '&';
     }
     if (this.state.price_rating > 0) {
       url += 'price_rating=' + this.state.price_rating + '&';
-      console.log(this.state.price_rating);
     }
     if (this.state.quality_rating > 0) {
       url += 'quality_rating=' + this.state.quality_rating + '&';
-      console.log(this.state.quality_rating);
     }
     if (this.state.clenliness_rating > 0) {
       url += 'clenliness_rating=' + this.state.clenliness_rating + '&';
-      console.log(this.state.clenliness_rating);
     }
-    if(this.state.limit!='') {
+    if (this.state.limit != '') {
       url += 'limit=' + this.state.limit + '&';
     }
-   
-  
+
     this.GetSearchInfo(url);
-    
   };
 
-  ratingCompleted(rating,name){
-    console.log(rating,name);
-      let stateObject = () => {
-          let returnObj = {};
-          returnObj[name] = rating;
-          return returnObj;
-      };
-      this.setState(stateObject);
-      } 
+  ratingCompleted(rating, name) {
+    let stateObject = () => {
+      let returnObj = {};
+      returnObj[name] = rating;
+      return returnObj;
+    };
+    this.setState(stateObject);
+  }
 
   render() {
-
-
     if (this.state.isLoading) {
       return (
         <View>
@@ -140,63 +120,62 @@ class Search extends Component {
       );
     } else {
       return (
-        <View style={{flex:1}}>
-          
-          <Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Search</Text>
+        <View style={{flex: 1}}>
           <TextInput
-            placeholder="Enter your search"
+            placeholder="Enter your search query"
             value={this.state.query}
             onChangeText={(query) => this.setState({query: query})}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 3, borderWidth: 2, margin: 5}}
           />
-           <TextInput
-            placeholder="Enter your limit"
+          <TextInput
+            placeholder="Enter your limit (number of locations to return)"
             value={this.state.limit}
             onChangeText={(limit) => this.setState({limit: limit})}
-            style={{padding: 5, borderWidth: 1, margin: 5}}
+            style={{padding: 3, borderWidth: 2, margin: 5}}
+            keyboardType= "numeric"
           />
-<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Overall Rating</Text>          
-<AirbnbRating
-          size={15}
-          defaultRating={0}
+          <Text style={{fontSize: 18, color: 'black', textAlign: 'center'}}>
+            Overall Rating
+          </Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) =>
+              this.ratingCompleted(rating, 'overall_rating')
+            }
+          />
+          <Text style={{fontSize: 18, color: 'black', textAlign: 'center'}}>
+            Price Rating
+          </Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) =>
+              this.ratingCompleted(rating, 'price_rating')
+            }
+          />
+          <Text style={{fontSize: 18, color: 'black', textAlign: 'center'}}>
+            Quality Rating
+          </Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) =>
+              this.ratingCompleted(rating, 'quality_rating')
+            }
+          />
+          <Text style={{fontSize: 18, color: 'black', textAlign: 'center'}}>
+            Clenliness Rating
+          </Text>
+          <AirbnbRating
+            size={15}
+            defaultRating={0}
+            onFinishRating={(rating) =>
+              this.ratingCompleted(rating, 'clenliness_rating')
+            }
+          />
 
-          onFinishRating={(rating) => this.ratingCompleted(rating, "overall_rating")} 
-          />
-<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Price Rating</Text>          
-<AirbnbRating
-          size={15}
-          defaultRating={0}
-          onFinishRating={(rating) => this.ratingCompleted(rating, "price_rating")} 
-          />
-<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Quality Rating</Text>          
-<AirbnbRating
-          size={15}
-          defaultRating={0}
-          onFinishRating={(rating) => this.ratingCompleted(rating, "quality_rating")} 
-          />
-<Text style={{fontSize: 20, color: 'black' , textAlign: 'center'}}>Clenliness Rating</Text>         
- <AirbnbRating
-          size={15}
-          defaultRating={0}
-          onFinishRating={(rating) => this.ratingCompleted(rating, "clenliness_rating")} 
-          />
-          
           <Button title="Search" onPress={() => this.Search()} />
-          <FlatList
-            data={this.state.listData}
-            renderItem={({item}) => (
-              <View>
-                <Text></Text>
-                <Text>Location name: {item.location_name}</Text>
-                <Text>Location town: {item.location_town}</Text>
-                <Text>Overall rating: {item.avg_overall_rating}</Text>
-                <Text>Price rating: {item.avg_price_rating}</Text>
-                <Text>Quality rating: {item.avg_quality_rating}</Text>
-                <Text>Cleanliness rating: {item.avg_clenliness_rating}</Text>
-              </View>
-            )}
-            keyExtractor={(item, index) => item.location_id.toString()}
-          />
         </View>
       );
     }

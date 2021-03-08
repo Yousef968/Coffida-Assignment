@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import { Text,View,ToastAndroid, ActivityIndicator, FlatList,  Alert,} from 'react-native';
+import {
+  Text,
+  View,
+  ToastAndroid,
+  ActivityIndicator,
+  FlatList,
+  Alert,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -9,27 +16,52 @@ class Search extends Component {
     super(props);
 
     this.state = {
-      isLoading: true,
-      query: '',
-      overall_rating: 0,
-      price_rating:0,
-      quality_rating:0,
-      clenliness_rating:0,
-      
+      listData: '',
     };
   }
+  GetSearchInfo = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    const url = this.props.route.params.url;
+    return fetch(url, {
+      headers: {
+        'X-Authorization': value,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 400){
+          throw 'Bad Request';
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else if (response.status === 500) {
+          throw 'Server Error';
+        }
+      })
+
+      .then(async (responseJson) => {
+        this.setState({
+          isLoading: false,
+          listData: responseJson,
+        });
+        
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+      });
+  };
+
 
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
-      //this.getInfo();
-      const {Info} = this.props.route.params;
-      Info();
-      
+      this.GetSearchInfo();
     });
   }
   componentWillUnmount() {
     this.unsubscribe();
+  
   }
 
   checkLoggedIn = async () => {
@@ -37,7 +69,6 @@ class Search extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -51,7 +82,6 @@ class Search extends Component {
   
  
   render() {
-    const navigation = this.props.navigation;
 
     if (this.state.isLoading) {
       return (
@@ -62,8 +92,6 @@ class Search extends Component {
     } else {
       return (
         <View style={{flex:1}}>
-          
-        
           <FlatList
             data={this.state.listData}
             renderItem={({item}) => (
@@ -79,10 +107,10 @@ class Search extends Component {
             )}
             keyExtractor={(item, index) => item.location_id.toString()}
           />
+
         </View>
       );
     }
   }
 }
-
 export default Search;

@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
-import { View,ToastAndroid, Alert, ActivityIndicator,FlatList,TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  ToastAndroid,
+  Alert,
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Container,  Button, Text } from 'native-base';
+import {Container, Button, Text} from 'native-base';
 
 class findLocation extends Component {
   constructor(props) {
@@ -32,79 +39,48 @@ class findLocation extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
-    } else{
+    } else {
       this.setState({
-        isLoading: false
+        isLoading: false,
       })
     }
   }
 
 
   getInfo = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
-    
+
     return fetch('http://10.0.2.2:3333/api/1.0.0/find' , {
       headers: {
-        'X-Authorization': value, 
+        'X-Authorization': value,
       },
     })
       .then((response) => {
         if (response.status === 200) {
           return response.json()
+        } else if (response.status === 400) {
+          throw 'Bad Request';
         } else if (response.status === 401) {
           throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 500){
+          throw 'Server Error';
         }
       })
 
       .then(async (responseJson) => {
         this.setState({
           isLoading: false,
-          listData: responseJson
+          listData: responseJson,
         });
-        ToastAndroid.show('Locations revealed', ToastAndroid.SHORT);
       })
       .catch((error) => {
         console.log(error);
         ToastAndroid.show('Error!', ToastAndroid.SHORT);
       });
   };
-  
-  getLocInfo = async () => {
-    //Validation Here
-    const value = await AsyncStorage.getItem('@session_token');
-    
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location'  , {
-      headers: {
-        'X-Authorization': value, 
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json()
-        } else if (response.status === 401) {
-          throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
-        }
-      })
 
-      .then(async (responseJson) => {
-        this.setState({
-          isLoading: false,
-          listData: responseJson
-        });
-        ToastAndroid.show('Info out', ToastAndroid.SHORT);
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show('Error!', ToastAndroid.SHORT);
-      });
-  };
+
 
   render() {
     const navigation = this.props.navigation;
@@ -118,11 +94,11 @@ class findLocation extends Component {
       );
     } else {
       return (
-        
+
         <Container>
-        
-          
-           
+
+
+
 
            <FlatList
           data = {this.state.listData}
@@ -130,45 +106,27 @@ class findLocation extends Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate("getSingleLocation", {loc_id: item.location_id , rev_id: item.review_id})} >
             <View>
                <Text></Text>
-             
-        
+
+
              <Text style={{fontSize:18, color: 'black'}}>Location name : {item.location_name}</Text>
              <Text style={{fontSize:18, color: 'black'}}>Location town : {item.location_town}</Text>
-
-        
-
-
-
-
-            
 
             </View>
 
             </TouchableOpacity>
           )}
-          keyExtractor ={(item, index) => item.location_id.toString()}
+            keyExtractor={(item, index) => item.location_id.toString()}
           />
-          
+
           <Button
           block style={{backgroundColor: 'blue' , height:50, marginBottom:10}}
           onPress={() => this.props.navigation.navigate("Search")} >
             <Text>Filter search</Text>
           </Button>
-           
-
-         
 
         </Container>
       );
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-    backgroundColor: 'pink',
-  },
-});
-
 export default findLocation;

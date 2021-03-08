@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, StyleSheet,  Text, ToastAndroid} from 'react-native';
+import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
 
 
 
@@ -48,17 +48,24 @@ class HandleReviews extends Component {
         headers: {
           'X-Authorization': value,
         },
-        
+
       })
       .then((response) => {
         if (response.status === 200) {
-            console.log("Deleted the review");
+          console.log('Deleted the review');
         } else if (response.status === 400) {
-          throw 'Failed Validation';
-        } else {
-          throw 'Something went wrong';
+          throw 'Bad request';
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else if (response.status === 403) {
+          throw 'Forbidden';
+        } else if (response.status === 404){
+          throw 'Not Found';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
+      
       .then(async () => {
         ToastAndroid.show('Deleted your review', ToastAndroid.SHORT);
         this.props.navigation.navigate('Home');
@@ -72,33 +79,21 @@ class HandleReviews extends Component {
   
 
   render() {
-    const navigation = this.props.navigation;
 
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>
-           Coffida App</Text>
-<View style={styles.space} />
+        <Text style={styles.text}>Coffida App</Text>
+        <View style={styles.space} />
         
         <View style={styles.space} />
      
-        <Button title="Delete this review"
+        <Button
+          title="Delete this review"
         type="solid"
-        onPress={() => this.deleteReview()}  />
-        
-        
-
-        
-        
-       
-
-        
-     
+          onPress={() => this.deleteReview()} />
 
         </View>
 
-        
-      
     );
   }
 }
@@ -117,7 +112,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
     textAlign: 'center',
-  //  justifyContent: 'flex-start',
   },
 });
 

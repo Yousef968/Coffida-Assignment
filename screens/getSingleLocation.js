@@ -1,20 +1,14 @@
 import React, {Component} from 'react';
 import {
-  
   View,
   ToastAndroid,
   Alert,
   ActivityIndicator,
   FlatList,
-  TouchableOpacity,Image,
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {  Button, Text } from 'native-base';
-
-
-
+import {Button, Text} from 'native-base';
 
 class getSingleLocation extends Component {
   constructor(props) {
@@ -24,7 +18,6 @@ class getSingleLocation extends Component {
       isLoading: true,
       location: null,
       location_id: '',
-
 
       userData: [],
     };
@@ -45,7 +38,6 @@ class getSingleLocation extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -53,92 +45,8 @@ class getSingleLocation extends Component {
       });
     }
   };
-  unfavLoc = async () => {
-    const value = await AsyncStorage.getItem('@session_token');
-    const loc_id = this.props.route.params.loc_id;
-
-    return fetch(
-      'http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/favourite',
-      {
-        method: 'delete',
-        headers: {
-          'X-Authorization': value,
-        },
-      },
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('Location unfavourited');
-
-
-    } else if (response.status === 401) {
-      throw 'Unauthorised';
-    } else {
-      throw 'Something went wrong';
-    }
-  })
-  
-
-  .then(async () => {
-    this.setState({
-      isLoading: false,
-      
-    });
-    ToastAndroid.show('Location unfavourited',ToastAndroid.SHORT);
-    
-  })
-  .catch((error) => {
-    console.log(error);
-    ToastAndroid.show('Error!', ToastAndroid.SHORT);
-  });
-
-}
-
-
-  favLoc = async () => {
-    //Validation Here
-    const value = await AsyncStorage.getItem('@session_token');
-    const loc_id = this.props.route.params.loc_id;
-
-    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + loc_id + '/favourite' , {
-      method: 'post',
-      headers: {
-        'X-Authorization': value,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("Location favourited");
-        } else if (response.status === 401) {
-          throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
-        }
-      })
-      
-
-      .then(async () => {
-        this.setState({
-          isLoading: false,
-          
-        });
-        ToastAndroid.show('Location favourited',ToastAndroid.SHORT);
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show('Error!', ToastAndroid.SHORT);
-      });
-  };
-  
-
-  
-
-
-
-  
 
   getInfo = async () => {
-    //Validation Here
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
 
@@ -150,10 +58,10 @@ class getSingleLocation extends Component {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 401) {
-          throw 'Unauthorised';
-        } else {
-          throw 'Something went wrong';
+        } else if (response.status === 404) {
+          throw 'Not Found';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
 
@@ -162,11 +70,6 @@ class getSingleLocation extends Component {
           isLoading: false,
           userData: responseJson,
         });
-        ToastAndroid.show(
-          'Details for this location revealed',
-          ToastAndroid.SHORT,
-        );
-        console.log(loc_id);
       })
       .catch((error) => {
         console.log(error);
@@ -174,13 +77,9 @@ class getSingleLocation extends Component {
       });
   };
 
-
   render() {
     const myMap = new Map(Object.entries(this.state.userData));
     let loc_id = myMap.get('location_id');
-    console.log(loc_id);
-  
-    console.log(this.state.userData);
 
     if (this.state.isLoading) {
       return (
@@ -190,106 +89,103 @@ class getSingleLocation extends Component {
       );
     } else {
       return (
-<View style = {{flex:1}} >
-
-
-<View style={{marginBottom:10}} >
-
-           <Button 
-           block style={{backgroundColor: 'blue' , width:'100%'}} 
-            onPress={() =>
-              this.props.navigation.navigate('Add review', {
-                loc_id: myMap.get('location_id'),
-              })
-            } >
+        <View style={{flex: 1}}>
+          <View style={{marginBottom: 10}}>
+            <Button
+              block
+              style={{backgroundColor: 'blue', width: '100%'}}
+              onPress={() =>
+                this.props.navigation.navigate('Add review', {
+                  loc_id: myMap.get('location_id'),
+                })
+              }>
               <Text>Add review for this location</Text>
             </Button>
-             
-            
-           
           </View>
-          
-          
-          <Text style={{fontSize: 20, color: 'black' , textAlign:'center'}}>
+
+          <Text style={{fontSize: 20, color: 'black', textAlign: 'center'}}>
             Location
           </Text>
 
-
-
-
-<TouchableOpacity  onPress={() => this.props.navigation.navigate('FavouriteALocation' , {loc_id: loc_id})}>
-        
-
-
-
-
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('FavouriteALocation', {
+                loc_id: loc_id,
+              })
+            }>
             <Text style={{fontSize: 13.75}}>
-            {'\n'}
-            Location_Name: {myMap.get('location_name')}
-            {'\n'}
-            Location_Town: {myMap.get('location_town')}
-            {'\n'}
-            Latitude: {myMap.get('latitude')}
-            {'\n'}
-            Longitude: {myMap.get('longitude')}
-            {'\n'}
-            Photo_Path: {myMap.get('photo_path')}
-            {'\n'}
-            Avg_Overall_Rating: {myMap.get('avg_overall_rating')}
-            {'\n'}
-            Avg_Price_Rating: {myMap.get('avg_price_rating')}
-            {'\n'}
-            Avg_Quality_Rating: {myMap.get('avg_quality_rating')}
-            {'\n'}
-            Avg_Cleanliness_Rating: {myMap.get('avg_clenliness_rating')}
-            {'\n'}
-          </Text>
-          </TouchableOpacity>
-          <Text style={{fontSize: 20, color: 'black' , textAlign:'center'}}>
-            Reviews
+              {'\n'}
+              Location_Name: {myMap.get('location_name')}
+              {'\n'}
+              Location_Town: {myMap.get('location_town')}
+              {'\n'}
+              Latitude: {myMap.get('latitude')}
+              {'\n'}
+              Longitude: {myMap.get('longitude')}
+              {'\n'}
+              Photo_Path: {myMap.get('photo_path')}
+              {'\n'}
+              Avg_Overall_Rating: {myMap.get('avg_overall_rating')}
+              {'\n'}
+              Avg_Price_Rating: {myMap.get('avg_price_rating')}
+              {'\n'}
+              Avg_Quality_Rating: {myMap.get('avg_quality_rating')}
+              {'\n'}
+              Avg_Cleanliness_Rating: {myMap.get('avg_clenliness_rating')}
+              {'\n'}
             </Text>
-            
-            <FlatList
-          data = {this.state.userData.location_reviews}
-          renderItem={({item}) => (
-            <View>
+          </TouchableOpacity>
+          <Text style={{fontSize: 20, color: 'black', textAlign: 'center'}}>
+            Reviews
+          </Text>
 
-                
+          <FlatList
+            data={this.state.userData.location_reviews}
+            renderItem={({item}) => (
+              <View>
+                <Text></Text>
 
-             
-             
-            <Text></Text>
-            
-             
-            <Text style={{fontSize:15}}>Overall rating: {item.overall_rating} </Text>
-            <Text style={{fontSize:15}}>Price rating: {item.price_rating}</Text>
-            <Text style={{fontSize:15}}>Quality rating: {item.quality_rating}</Text>
-            <Text style={{fontSize:15}}>Cleanliness rating: {item.clenliness_rating}</Text>
-            <Text style={{fontSize:15}}>Review body: {item.review_body}             </Text>
+                <Text style={{fontSize: 15}}>
+                  Overall rating: {item.overall_rating}{' '}
+                </Text>
+                <Text style={{fontSize: 15}}>
+                  Price rating: {item.price_rating}
+                </Text>
+                <Text style={{fontSize: 15}}>
+                  Quality rating: {item.quality_rating}
+                </Text>
+                <Text style={{fontSize: 15}}>
+                  Cleanliness rating: {item.clenliness_rating}
+                </Text>
+                <Text style={{fontSize: 15}}>
+                  Review body: {item.review_body}{' '}
+                </Text>
 
-           <TouchableOpacity  onPress={() => this.props.navigation.navigate("likeRevs", {rev_id: item.review_id , loc_id: loc_id})} >
-           <Text style={{fontSize:15}}>Likes: {item.likes} </Text>
-           </TouchableOpacity>
-        
-           <Button
-           block style={{backgroundColor: 'blue' , width:'25%'}} 
-           
-           onPress={() => this.props.navigation.navigate("viewPhoto" , {rev_id: item.review_id, loc_id: loc_id})} >
-             <Text style={{fontSize:10}}>view photo</Text> 
-           </Button>
-       
-           
-           </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('likeRevs', {
+                      rev_id: item.review_id,
+                      loc_id: loc_id,
+                    })
+                  }>
+                  <Text style={{fontSize: 15}}>Likes: {item.likes} </Text>
+                </TouchableOpacity>
+
+                <Button
+                  block
+                  style={{backgroundColor: 'blue', width: '25%'}}
+                  onPress={() =>
+                    this.props.navigation.navigate('viewPhoto', {
+                      rev_id: item.review_id,
+                      loc_id: loc_id,
+                    })
+                  }>
+                  <Text style={{fontSize: 10}}>view photo</Text>
+                </Button>
+              </View>
             )}
-          keyExtractor ={(item) => item.review_id.toString()}      
-          
-              />
-        
-          
-
-
-          
-
+            keyExtractor={(item) => item.review_id.toString()}
+          />
         </View>
       );
     }

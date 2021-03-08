@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {View,  Alert, TextInput, ToastAndroid, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Alert,
+  TextInput,
+  ToastAndroid,
+  ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button , Text} from 'native-base';
+import {Button, Text} from 'native-base';
 
 
 
@@ -12,10 +18,8 @@ class updateFname extends Component {
 
     this.state = {
       isLoading: true,
-      first_name_error:'',
+      first_name_error: '',
       first_name: '',
-     
-      
     };
   }
   componentDidMount() {
@@ -32,61 +36,57 @@ class updateFname extends Component {
     if (value === null) {
       Alert.alert('Redirected to login page');
       Alert.alert('You need to be logged in to view this page');
-      //  ToastAndroid.show("You need to be logged in to view this page",ToastAndroid.LONG);
       this.props.navigation.navigate('Login');
     } else{
       this.setState({
-        isLoading:false
+        isLoading: false,
     })
   }
 };
 
   updateUser = async () => {
-    if(this.state.first_name=='')
-    {
+    if (this.state.first_name == '') {
       this.setState({first_name_error: "first name can't be empty"})
-    }
-    else {
+    } else {
+      const value = await AsyncStorage.getItem('@session_token');
+      const id = await AsyncStorage.getItem('@user_id');
 
-    const value = await AsyncStorage.getItem('@session_token');
-    const id = await AsyncStorage.getItem('@user_id');
-
-
-
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
-      method: 'patch',
-      headers: {
-        'X-Authorization': value,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-         // return response.json();
-        } else if (response.status === 400) {
-          throw 'Bad Request';
-        } else if (response.status === 401) {
-          ToastAndroid.show("You're not logged in!", ToastAndroid.SHORT);
-        } else {
-          throw 'Something went wrong';
-        }
+      return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + id, {
+        method: 'patch',
+        headers: {
+          'X-Authorization': value,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state),
       })
+        .then((response) => {
+          if (response.status === 200) {
+          } else if (response.status === 400) {
+            throw 'Bad Request';
+          } else if (response.status === 401) {
+            throw 'Unauthorised';
+          } else if (response.status === 403){
+            throw 'Forbidden';
+          } else if (response.status === 404) {
+            throw 'Not found';
+          } else if (response.status === 500) {
+            throw 'Server Error';
+          }
+        })
 
-      .then(async () => {
-        this.setState({
-          isLoading: false,
-        
-        });
-          console.log("Details changed");
-     
-        this.props.navigation.navigate('Home');
+        .then(async () => {
+          this.setState({
+            isLoading: false,
+          });
+          console.log('Details changed');
 
-           ToastAndroid.show("Details Updated!", ToastAndroid.SHORT);
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show(error, ToastAndroid.SHORT);
+          this.props.navigation.navigate('Home');
+
+          ToastAndroid.show('Details Updated!', ToastAndroid.SHORT);
+        })
+        .catch((error) => {
+          console.log(error);
+          ToastAndroid.show(error, ToastAndroid.SHORT);
       });
   };
 }
@@ -94,7 +94,6 @@ class updateFname extends Component {
   
 
   render() {
-    const navigation = this.props.navigation;
     if (this.state.isLoading) {
       return (
         <View>
@@ -105,7 +104,7 @@ class updateFname extends Component {
       return (
         <View>
 
-          <Text style={{textAlign:'center'}}> Update first name</Text>
+          <Text style={{textAlign: 'center'}}> Update first name</Text>
 
           <TextInput
             placeholder="Enter first name"
@@ -113,11 +112,10 @@ class updateFname extends Component {
             value={this.state.first_name}
             style={{padding: 5, borderWidth: 2, margin: 5}}
           />
-          <Text style={{color:'red'}} > {this.state.first_name_error}</Text>
-         
+          <Text style={{color: 'red'}}> {this.state.first_name_error}</Text>
           <Button
-          onPress={() => this.updateUser()} 
-          block style={{backgroundColor: 'red' , width:'100%'}} >
+            onPress={() => this.updateUser()}
+            block style={{backgroundColor: 'red', width: '100%'}}>
             <Text>Update</Text>
           </Button>
         </View>
@@ -125,5 +123,4 @@ class updateFname extends Component {
     }
   }
 }
-
 export default updateFname;

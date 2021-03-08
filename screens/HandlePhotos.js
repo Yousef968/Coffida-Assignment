@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Alert ,ToastAndroid} from 'react-native';
+import {View, Alert, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
 
 
@@ -37,24 +37,19 @@ class HandlePhotos extends Component {
 
 
   takePic = async() => {
-      if(this.camera){
-          const options = {quality: 0.5 , base64: true};
-          const data = await this.camera.takePictureAsync(options);
+    if (this.camera) {
+      const options = {quality: 0.5, base64: true};
+      const data = await this.camera.takePictureAsync(options);
 
-          this.addPicture(data);
+      this.addPicture(data);
 
       }
   }
 
-  addPicture = async(data) => {
+  addPicture = async (data) => {
     const value = await AsyncStorage.getItem('@session_token');
     const loc_id = this.props.route.params.loc_id;
     const rev_id = this.props.route.params.rev_id;
-    
-    
-
-    
-
     return fetch('http://10.0.2.2:3333/api/1.0.0/location/'+ loc_id + '/review/' + rev_id + '/photo', 
       {
         method: 'post',
@@ -63,22 +58,25 @@ class HandlePhotos extends Component {
           'X-Authorization': value,
         },
         body: data
-        
       })
       .then((response) => {
         if (response.status === 200) {
-          
+          console.log("Photo added");
         } else if (response.status === 400) {
-          throw 'Failed Validation';
-        } else {
-          throw 'Something went wrong';
+          throw 'Bad request';
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else if (response.status === 404) {
+          throw 'Not found';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
+      
       .then(async () => {
         console.log('Photo added');
         ToastAndroid.show('Photo added', ToastAndroid.SHORT);
-        this.props.navigation.navigate("Home");
-        
+        this.props.navigation.navigate('Home');
       })
       .catch((error) => {
         console.log(error);
@@ -103,11 +101,15 @@ class HandlePhotos extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
-            
-        } else if (response.status === 400) {
-          throw 'Failed Validation';
-        } else {
-          throw 'Something went wrong';
+          console.log('Photo Deleted');
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else if (response.status === 403) {
+          throw 'Forbidden';
+        } else if (response.status === 404) {
+          throw 'Not found';
+        } else if (response.status === 500) {
+          throw 'Server Error';
         }
       })
       .then(async () => {
@@ -128,32 +130,25 @@ class HandlePhotos extends Component {
   render() {
 
     return (
-      <View style={{flex:1, width:'100%'}}>
-          <RNCamera
-          ref={ref => {
-              this.camera = ref;
+      <View style={{flex: 1, width: '100%'}}>
+        <RNCamera
+          ref={(ref) => {
+            this.camera = ref;
           }}
           style={{
-              flex:1 , width:'100%'
-              
+            flex: 1,
           }}
           captureAudio={false}
           />
           <Button
           title="Take photo" 
           onPress= {() => {this.takePic()}} />
-          <View style={{height:5}} />
-                 <Button title="Delete photo"
-        onPress={() => this.deletePic()} />
-        
+        <View style={{height: 5}} />
+        <Button title="Delete photo" onPress={() => this.deletePic()} />
 
         </View>
 
-        
-      
     );
   }
 };
-
-
 export default HandlePhotos;
